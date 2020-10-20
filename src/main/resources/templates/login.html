@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.8/vue.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        *{
+            padding:0 0px;
+            margin: 0 0px;
+        }
+        .header{
+            width:100%;
+            height:96px;
+        }
+        .content{
+            background-color:#F2F4F8;
+            height:607px;
+        }
+        .img{
+            width:80px;
+            height:50px;
+        }
+        .content_form{
+            width:450px;
+            height:480px;
+            background-color:white;
+            margin-left:550px;
+        }
+        ._input{
+            width:355px;
+        }
+        .login{
+            width:355px;
+            margin-top:20px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <ul style="padding-top:20px;">
+            <li style="float:left;margin-left:200px;list-style:none">
+                <img src="/img/logo.png" alt="" class="img">
+            </li>
+        </ul>
+    </div>
+    <div style="width:100%;height:50px;background-color:#F2F4F8;"></div>
+    <div class="content">
+        <div class="content_form">
+            <div style="padding-top:50px;margin-left:40px;">
+                <p style="font-size:24px;font-weight:700;">登录脉脉</p>
+            </div>
+            <div style="margin-top:30px;margin-left:40px;">
+                <el-input v-model="form.phone" placeholder="请输入手机号码" class="_input"></el-input>
+                <div style="margin-top:20px;" :style="{display:form.input_state==='block'?'none':'block'}">
+                    <el-input v-model="form.password" placeholder="请输入密码" type="password" class="_input">
+                    </el-input>
+                </div>
+                <div :style="{display:form.input_state}" style="margin-top:20px;">
+                    <el-input v-model="form.password" placeholder="请输入验证码" style="width:220px;"></el-input>
+                    <el-button type="primary" plain style="margin-left:15px;" @click="sendPhoneCode" size="medium">{{form.code_state}}</el-button>
+                </div>
+                <el-button type="primary" class="login" style="margin-left:-1px;" @click="check">登录</el-button>
+            </div>
+            <div style="margin-top:20px;margin-left:40px;">
+                <a href="javascript:void(0);" style="text-decoration:none;color:#3375FF;font-size:14px;" @click="switch_input_state">{{form.passwordOrCode}}</a>
+            </div>
+            <div style="font-size:14px;color:rgba(0,0,0,0.45);margin-left:40px;margin-top:100px;">
+                <span>登录即表示你同意</span>
+                <span><a href="javascript:void(0);" style="text-decoration:none;color:rgba(0,0,0,0.45);">《脉脉服务协议》</a></span>
+                <span>和</span>
+                <span><a href="javascript:void(0);" style="text-decoration:none;color:rgba(0,0,0,0.45);">《脉脉隐私政策》</a></span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data:{
+            form:{
+                phone: '',
+                code: '',
+                password: '',
+                input_state: 'none',
+                passwordOrCode:'切换验证码登录',
+                code_state: '发送验证码'
+            }
+        },
+        created(){
+
+        },
+        methods:{
+            check(){
+
+            },
+            sendPhoneCode(){
+
+            },
+            switch_input_state(){
+                if(this.form.input_state==='block'){
+                    this.form.input_state='none';
+                    this.form.passwordOrCode='切换验证码登录';
+                }
+                else{
+                    this.form.input_state='block';
+                    this.form.passwordOrCode='切换密码登录';
+                }
+            }
+        }
+    })
+</script>
+</html>
