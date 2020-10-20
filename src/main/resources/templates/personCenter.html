@@ -5,43 +5,10 @@
     <title>个人中心</title>
     <script src="https://cdn.bootcss.com/vue/2.6.8/vue.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link href="css/personCenter.css" type="text/css" rel="stylesheet" />
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <style>
-        *{
-            padding:0 0;
-            margin:0 0;
-        }
-        .header{
-            width:100%;
-            background-color:#fff;
-            position:fixed;
-            -webkit-box-shadow: 2px 2px 10px rgb(220,220,220);
-        }
-        .main{
-            width:100%;
-            height:2000px;
-            background-color:#ededeb;
-        }
-        .el-a-link{
-            font-size:16px;
-            color:#666;
-            text-decoration:none;
-        }
-        .el-info_content{
-            margin-left:350px;
-            width:740px;
-            background-color:white;
-        }
-        .el-info-tag{
-            color:#008be9;
-            font-size:16px;
-            float:left;
-            line-height:30px;
-
-        }
-    </style>
 </head>
 <body>
 <div id="app">
@@ -80,7 +47,7 @@
             <el-main class="main">
                 <div style="width:100%;height:100px;background-color:#ededeb;"></div>
                 <!--基本信息-->
-                <div class="el-info_content" style="height:270px;">
+                <div class="el-info_content" style="height:300px;">
                     <div style="margin-left:20px;padding-top:15px;">
                         <span class="el-info-tag">基本信息</span>
                         <span style="float:left;margin-left:600px;">
@@ -89,22 +56,86 @@
                             </a>
                         </span>
                     </div>
-                    <div>
-
+                    <div style="margin-top:60px;margin-left:20px;">
+                        <label class="el-info-label">真实姓名:</label>
+                        <span style="margin-left:40px;">肖茗夫</span>
                     </div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
+                    <div style="margin-top:20px;margin-left:20px;">
+                        <label class="el-info-label">您的性别:</label>
+                        <span style="margin-left:40px;">男</span>
+                    </div>
+                    <div style="margin-top:20px;margin-left:20px;">
+                        <label class="el-info-label">行业方向:</label>
+                        <span style="margin-left:40px;">IT互联网 研发</span>
+                    </div>
+                    <div style="margin-top:20px;margin-left:20px;">
+                        <label class="el-info-label">当前公司:</label>
+                        <span style="margin-left:40px;">广州虎牙信息科技有限公司</span>
+                    </div>
+                    <div style="margin-top:20px;margin-left:20px;">
+                        <label class="el-info-label">当前职位:</label>
+                        <span style="margin-left:40px;">JAVA开发工程师</span>
+                    </div>
                 </div>
                 <!--职业标签-->
-                <div></div>
+                <div class="el-info_content" style="height:150px;margin-top:20px;">
+                    <div style="margin-left:20px;padding-top:15px;">
+                        <span class="el-info-tag">职业标签</span>
+                        <span style="float:left;margin-left:600px;">
+                            <a href="javascript:void(0);">
+                                <i class="el-icon-edit-outline" style="font-size:24px;"></i>
+                            </a>
+                        </span>
+                    </div>
+                    <div style="margin-top:60px;margin-left:20px;">
+                        <span><el-button type="primary" round>研发</el-button></span>
+                        <span style="margin-left:20px;"><el-button type="primary" round>社交</el-button></span>
+                    </div>
+                </div>
                 <!--求职信息-->
-                <div></div>
+                <div class="el-info_content" style="height:180px;margin-top:20px;">
+                    <div style="margin-left:20px;padding-top:15px;">
+                        <span class="el-info-tag">求职信息</span>
+                        <span style="float:left;margin-left:600px;">
+                            <a href="javascript:void(0);">
+                                <i class="el-icon-edit-outline" style="font-size:24px;"></i>
+                            </a>
+                        </span>
+                    </div>
+                    <div style="margin-top:60px;margin-left:20px;">
+                        <label class="el-info-label">学历:</label>
+                        <span style="margin-left:70px;">其他</span>
+                    </div>
+                    <div style="margin-top:20px;margin-left:20px;">
+                        <label class="el-info-label">期望薪资:</label>
+                        <span style="margin-left:40px;">未知</span>
+                    </div>
+                </div>
                 <!--联系方式-->
-                <div></div>
+                <div class="el-info_content" style="height:180px;margin-top:20px;">
+                    <div style="margin-left:20px;padding-top:15px;">
+                        <span class="el-info-tag">联系方式</span>
+                        <span style="float:left;margin-left:600px;">
+                            <a href="javascript:void(0);">
+                                <i class="el-icon-edit-outline" style="font-size:24px;"></i>
+                            </a>
+                        </span>
+                    </div>
+                    <div style="margin-top:60px;margin-left:20px;">
+                        <label class="el-info-label">工作地点:</label>
+                        <span style="margin-left:40px;">北京,海淀区</span>
+                    </div>
+                    <div style="margin-top:20px;margin-left:20px;">
+                        <label class="el-info-label">邮箱:</label>
+                        <span style="margin-left:70px;">1753972608@qq.com</span>
+                    </div>
+                </div>
                 <!--简历-->
-                <div></div>
+                <div class="el-info_content" style="height:220px;margin-top:20px;">
+                    <div style="margin-left:20px;padding-top:15px;">
+                        <span class="el-info-tag">简历附件</span>
+                    </div>
+                </div>
             </el-main>
         </el-container>
     </div>
