@@ -142,7 +142,7 @@
                             </div>
                             <p style="text-align:center;padding-top:16px;color:#999999;">格式仅支持pdf、doc、docx、wps、jpg、png、jpeg,不超过20M</p>
                         </div>
-                        <input type="file" name="ResumeFile" data-url="/test_file" accept=".doc,.docx,.pdf,.wps,.jpb,.png,.jpeg" id="uploadBtn">
+                        <input type="file" name="ResumeFile" accept=".doc,.docx,.pdf,.wps,.jpb,.png,.jpeg" id="uploadBtn" @change="test">
                     </div>
                 </div>
             </el-main>
@@ -154,13 +154,62 @@
     new Vue({
         el: '#app',
         data:{
-
+            basicInfo:{
+                realName: '',
+                sex: '',
+                work_direction:[{
+                      profession: 'IT互联网',
+                      major:['销售','研发','运营/编辑','产品','测试','运维/安全','人力HR','设计']
+                    },{
+                      profession: '文化传媒',
+                      major:['行政人事','销售','设计/动画','高管','品牌/公关','策划','市场商务']
+                    },{
+                      profession: '通信电子',
+                      major:['销售','生产制造','工程/维护','技工普工','硬件研发','经营管理','采购物控']
+                    },{
+                      profession:'金融',
+                      major:['销售/理财','财税审计','银行','高管','保险','市场商务','风投/投行','交易证券']
+                    },{
+                      profession: '教育培训',
+                      major:['市场销售','职业技能','幼教','小学教师','艺术体育','初中教师','行政/人事']
+                    },{
+                      profession: '医疗生物',
+                      major:['销售','医生','护士/护理','经营管理','行政人事','保健按摩','医药生产','医学研发']
+                    },{
+                      profession: '房产建筑',
+                      major:['装修施工','项目管理','销售/经纪人','设计规划','行政人事','市场商务','质检造价']
+                    },{
+                      profession: '化工能源',
+                      major:['生产制造','发电/传输','油煤矿产','销售客户','化工技术','经营管理','环保/水处理']
+                    }
+                ],
+                company: '',
+                position: '',
+                basicInfoState:'none'
+            },
+            workTag:{
+                tag: [],
+                workTagState: 'none'
+            },
+            jobInfo:{
+                education: '',
+                expect_Salary: '',
+                jobInfoState: 'none'
+            },
+            contactInfo:{
+                workBase: [],
+                mail: '',
+                contactInfoState: 'none'
+            }
         },
         created(){
 
         },
         methods:{
-
+            test(){
+                console.log("upload");
+                ///console.log("upload");
+            }
         }
     })
 </script>
