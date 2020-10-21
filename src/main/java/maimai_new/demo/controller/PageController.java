@@ -21,4 +21,8 @@ public class PageController {
     public String friends(){
         return "friends";
     }
+    @RequestMapping("/createarticle")
+    public String createarticle(){
+        return "createarticle";
+    }
 }
