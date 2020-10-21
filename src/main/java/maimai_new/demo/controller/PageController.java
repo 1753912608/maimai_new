@@ -17,4 +17,8 @@ public class PageController {
     public String personCenter(){
         return "personCenter";
     }
+    @RequestMapping("/friends_info")
+    public String friends(){
+        return "friends";
+    }
 }
