@@ -34,3 +34,31 @@
     color:#999;
     font-size:14px;
 }
+.uploadBox{
+    width:146px;
+    display:block;
+    margin: 0 auto;
+    height: 44px;
+}
+.uploadBox a{
+    display:block;
+    background:#008be9;
+    color:#ffffff;
+    height:44px;
+    line-height:44px;
+    text-align:center;
+    border-radius:6px;
+    text-decoration:none;
+}
+#uploadBtn{
+    position:relative;
+    top:-80px;
+    display:block;
+    width:140px;
+    height:44px;
+    left:275px;
+    line-height:44px;
+    opacity:0;
+    visibility:visible;
+    cursor:pointer;
+}
