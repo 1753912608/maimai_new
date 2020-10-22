@@ -51,7 +51,7 @@
                     <div style="margin-left:20px;padding-top:15px;">
                         <span class="el-info-tag">基本信息</span>
                         <span style="float:left;margin-left:600px;">
-                            <a href="javascript:void(0);">
+                            <a href="javascript:void(0);" @click="modifyBasicInfo">
                                 <i class="el-icon-edit-outline" style="font-size:24px;"></i>
                             </a>
                         </span>
@@ -78,16 +78,51 @@
                     </div>
                 </div>
                 <!--基本信息的编辑框-->
-                <div class="el-info_content" style="height:300px;" :style="{display:basicInfo.basicInfoState}">
-                    <div style="margin-left:20px;padding-top:15px;">
-                        <span class="el-info-tag">基本信息</span>
+                <el-dialog title="编辑基本信息" :visible.sync="basicInfo.dialogVisible" width="25%">
+                    <div style="margin-top:10px;">
+                        <span>
+                            <el-input v-model="basicInfo.realName" style="width:125px;height:40px;"></el-input>
+                        </span>
+                        <span style="margin-left:30px;">
+                            <el-radio v-model="basicInfo.sex" label="1" border class="el-input-border">男</el-radio>
+                            <el-radio v-model="basicInfo.sex" label="2" border class="el-input-border" style="margin-left:-30px;">女</el-radio>
+                        </span>
                     </div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
+                    <div style="margin-top:10px;float:left;">
+                        <el-dropdown split-button>
+                            {{basicInfo.value}}
+                            <el-dropdown-menu slot="dropdown" style="width:120px;">
+                                <el-dropdown-item
+                                        v-for="(x,index) in basicInfo.work_direction"
+                                        @click.native="test(x.profession,index)">{{x.profession}}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                    <div style="float:left;margin-left:30px;margin-top:10px;">
+                        <el-dropdown split-button>
+                            {{basicInfo.value1}}
+                            <el-dropdown-menu slot="dropdown" style="width:120px;">
+                                <el-dropdown-item
+                                        v-for="x in basicInfo.work_direction[basicInfo.selectedProfessionIndex].major"
+                                        @click.native="test1(x)">{{x}}
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                    <div style="margin-top:60px;">
+                        <el-input v-model="basicInfo.company" style="width:305px;height:40px;" placeholder="当前公司"></el-input>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <el-input v-model="basicInfo.position" style="width:305px;height:40px;" placeholder="当前职位"></el-input>
+                    </div>
+                    <div style="margin-top:50px;margin-left:140px;">
+                        <span slot="footer" class="dialog-footer">
+                          <el-button @click="basicInfo.dialogVisible = false">取 消</el-button>
+                          <el-button type="primary" @click="basicInfo.dialogVisible = false">确 定</el-button>
+                        </span>
+                    </div>
+                </el-dialog>
                 <!--职业标签-->
                 <div class="el-info_content" style="height:150px;margin-top:20px;">
                     <div style="margin-left:20px;padding-top:15px;">
@@ -166,7 +201,7 @@
         el: '#app',
         data:{
             basicInfo:{
-                realName: '',
+                realName: '肖茗夫',
                 sex: '',
                 work_direction:[{
                       profession: 'IT互联网',
@@ -196,7 +231,12 @@
                 ],
                 company: '',
                 position: '',
-                basicInfoState:'none'
+                dialogVisible:false,
+                selectedProfessionIndex: 0,
+                selectedMajorIndex: 0,
+                value:'IT互联网',
+                selectedMajorValue: '',
+                value1: '研发'
             },
             workTag:{
                 tag: [],
@@ -217,9 +257,15 @@
 
         },
         methods:{
-            test(){
-                console.log("upload");
-                ///console.log("upload");
+            test(value,index){
+                this.basicInfo.value=value;
+                this.basicInfo.selectedProfessionIndex=index;
+            },
+            test1(value){
+               this.basicInfo.value1=value;
+            },
+            modifyBasicInfo(){
+                this.basicInfo.dialogVisible=true;
             }
         }
     })
