@@ -25,4 +25,8 @@ public class PageController {
     public String createarticle(){
         return "createarticle";
     }
+    @RequestMapping("/mychat")
+    public String mychat(){
+        return "chat";
+    }
 }
