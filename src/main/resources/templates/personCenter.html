@@ -77,6 +77,17 @@
                         <span style="margin-left:40px;">JAVA开发工程师</span>
                     </div>
                 </div>
+                <!--基本信息的编辑框-->
+                <div class="el-info_content" style="height:300px;" :style="{display:basicInfo.basicInfoState}">
+                    <div style="margin-left:20px;padding-top:15px;">
+                        <span class="el-info-tag">基本信息</span>
+                    </div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
                 <!--职业标签-->
                 <div class="el-info_content" style="height:150px;margin-top:20px;">
                     <div style="margin-left:20px;padding-top:15px;">
@@ -93,7 +104,7 @@
                     </div>
                 </div>
                 <!--求职信息-->
-                <div class="el-info_content" style="height:180px;margin-top:20px;">
+                <div class="el-info_content" style="height:180px;margin-top:20px" :style="{display:basicInfo.basicInfoState==='none'?'block':'none'}">
                     <div style="margin-left:20px;padding-top:15px;">
                         <span class="el-info-tag">求职信息</span>
                         <span style="float:left;margin-left:600px;">
