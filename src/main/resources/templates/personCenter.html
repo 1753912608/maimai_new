@@ -83,7 +83,7 @@
                         <span>
                             <el-input v-model="basicInfo.realName" style="width:125px;height:40px;"></el-input>
                         </span>
-                        <span style="margin-left:30px;">
+                        <span style="margin-left:25px;">
                             <el-radio v-model="basicInfo.sex" label="1" border class="el-input-border">男</el-radio>
                             <el-radio v-model="basicInfo.sex" label="2" border class="el-input-border" style="margin-left:-30px;">女</el-radio>
                         </span>
@@ -128,7 +128,7 @@
                     <div style="margin-left:20px;padding-top:15px;">
                         <span class="el-info-tag">职业标签</span>
                         <span style="float:left;margin-left:600px;">
-                            <a href="javascript:void(0);">
+                            <a href="javascript:void(0);" @click="modifyWorkTag">
                                 <i class="el-icon-edit-outline" style="font-size:24px;"></i>
                             </a>
                         </span>
@@ -138,8 +138,17 @@
                         <span style="margin-left:20px;"><el-button type="primary" round>社交</el-button></span>
                     </div>
                 </div>
+                <!--编辑职业标签-->
+                <el-dialog title="编辑职业标签" :visible.sync="workTag.dialogVisible" width="40%">
+                    <div style="margin-top:50px;margin-left:200px;">
+                        <span slot="footer" class="dialog-footer">
+                          <el-button @click="workTag.dialogVisible = false">取 消</el-button>
+                          <el-button type="primary" @click="workTag.dialogVisible = false">确 定</el-button>
+                        </span>
+                    </div>
+                </el-dialog>
                 <!--求职信息-->
-                <div class="el-info_content" style="height:180px;margin-top:20px" :style="{display:basicInfo.basicInfoState==='none'?'block':'none'}">
+                <div class="el-info_content" style="height:180px;margin-top:20px">
                     <div style="margin-left:20px;padding-top:15px;">
                         <span class="el-info-tag">求职信息</span>
                         <span style="float:left;margin-left:600px;">
@@ -235,12 +244,11 @@
                 selectedProfessionIndex: 0,
                 selectedMajorIndex: 0,
                 value:'IT互联网',
-                selectedMajorValue: '',
                 value1: '研发'
             },
             workTag:{
                 tag: [],
-                workTagState: 'none'
+                dialogVisible: false
             },
             jobInfo:{
                 education: '',
@@ -266,6 +274,9 @@
             },
             modifyBasicInfo(){
                 this.basicInfo.dialogVisible=true;
+            },
+            modifyWorkTag(){
+                this.workTag.dialogVisible=true;
             }
         }
     })
