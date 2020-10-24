@@ -257,14 +257,26 @@
                     <div style="margin-left:20px;padding-top:15px;">
                         <span class="el-info-tag">简历附件</span>
                     </div>
-                    <div style="margin-top:60px;">
+                    <div style="margin-top:60px;" :style="{display:resume.resumeState==='none'?'block':'none'}">
                         <div class="resumeUpload">
                             <div class="uploadBox">
                                 <a href="javascript:void(0);" for="uploadBtn" class="uploadBox_text">上传简历附件</a>
                             </div>
-                            <p style="text-align:center;padding-top:16px;color:#999999;">格式仅支持pdf、doc、docx、wps、jpg、png、jpeg,不超过20M</p>
+                            <p style="text-align:center;padding-top:16px;color:#999999;">格式仅支持pdf、doc、docx、png不超过20M</p>
                         </div>
-                        <input type="file" name="ResumeFile" accept=".doc,.docx,.pdf,.wps,.jpb,.png,.jpeg" id="uploadBtn" @change="test">
+                        <input type="file" name="ResumeFile" accept=".doc,.docx,.pdf,.jpg,.png" id="uploadBtn" @change="upload">
+                    </div>
+                    <div style='margin-top:60px;' :style="{display:resume.resumeState}">
+                        <div style="margin-left:200px;margin-top:40px;float:left;">
+                            <img :src="resume.resumeImg" alt="" width="48px" height="48px">
+                        </div>
+                        <div style="float:left;margin-left:20px;margin-top:40px;">
+                            <div style="color:rgb(120,120,120)">{{resume.resumeName}}</div>
+                            <div style="margin-top:5px;color:rgb(120,120,120)">{{resume.resumeTime}}上传</div>
+                        </div>
+                        <div style="float:left;margin-left:50px;margin-top:50px;">
+                            <a href="javascript:void(0);" style="text-decoration:none;color:rgb(120,120,120)">删除</a>
+                        </div>
                     </div>
                 </div>
             </el-main>
@@ -331,6 +343,12 @@
                 workBase: '',
                 mail: '',
                 dialogVisible: false
+            },
+            resume: {
+                resumeImg: '',
+                resumeName: '',
+                resumeTime: '',
+                resumeState: 'none'
             }
         },
         created(){
@@ -369,6 +387,25 @@
             pushMyListByInput(){
                 this.workTag.myTagList.push(this.workTag.tagInput);
                 this.workTag.tagInput='';
+            },
+            upload(){
+                let fileName=document.getElementById("uploadBtn").files[0].name;
+                if(fileName.substring(fileName.lastIndexOf('.')+1)==='pdf'){
+                    this.resume.resumeImg='/img/pdf.png';
+                }else if(fileName.substring(fileName.lastIndexOf('.')+1)==='doc'){
+                    this.resume.resumeImg='/img/doc.png';
+                }else if(fileName.substring(fileName.lastIndexOf('.')+1)==='docx'){
+                    this.resume.resumeImg='/img/doc.png';
+                }else if(fileName.substring(fileName.lastIndexOf('.')+1)==='png'){
+                    this.resume.resumeImg='/img/png.png';
+                }
+                this.resume.resumeName=fileName;
+                let date=new Date();
+                this.resume.resumeTime=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDay()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+                this.resume.resumeState='block';
+            },
+            removeResume(){
+
             }
         }
     })
