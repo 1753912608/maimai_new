@@ -90,7 +90,8 @@
                 password: '',
                 input_state: 'none',
                 passwordOrCode:'切换验证码登录',
-                code_state: '发送验证码'
+                code_state: '发送验证码',
+                rand_uuid: ''
             }
         },
         created(){
@@ -100,8 +101,49 @@
             check(){
 
             },
-            sendPhoneCode(){
-
+            async sendPhoneCode(){
+                this.getUUid();
+                if(this.form.phone.length===0) {
+                    this.$message({
+                        showClose: true,
+                        message: '手机号码不能为空',
+                        type: 'error'
+                    });
+                }else{
+                    if(this.form.code_state==='发送验证码'){
+                        let result=await axios.get('/sendPhoneCode?phone='+this.form.phone+'&rand_uuid='+this.form.rand_uuid);
+                        console.log(result);
+                        if(result.data===1){
+                            this.$message({
+                                showClose: true,
+                                message: '手机号码不能为空',
+                                type: 'success'
+                            });
+                            let lastTime = 59;
+                            let timer = setInterval(() => {
+                                if(lastTime>0){
+                                    this.form.code_state = lastTime + 's';
+                                    lastTime--;
+                                } else {
+                                    window.clearInterval(timer);
+                                    this.form.code_state = '发送验证码'
+                                }
+                            }, 1000);
+                        }else{
+                            this.$message({
+                                showClose: true,
+                                message: '手机号码格式错误,请输入正确的手机号',
+                                type: 'error'
+                            });
+                        }
+                    }
+                    else{
+                        this.$message({
+                            message: '请不要频繁点击哦',
+                            type: 'warning'
+                        });
+                    }
+                }
             },
             switch_input_state(){
                 if(this.form.input_state==='block'){
@@ -112,6 +154,13 @@
                     this.form.input_state='block';
                     this.form.passwordOrCode='切换密码登录';
                 }
+            },
+            getUUid(){
+                let rand_uuid='';
+                for(let i=0;i<20;i++){
+                    rand_uuid+=Math.floor(Math.random()*26)+'a';
+                }
+                this.form.rand_uuid=rand_uuid;
             }
         }
     })
