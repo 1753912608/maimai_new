@@ -27,20 +27,20 @@ public class UserController{
     /**
      *
      * @param phone
-     * @param randUserId
+     * @param rand_uuid
      * @return
      * 发送手机验证码
      */
     @ResponseBody
     @RequestMapping("/sendPhoneCode")
-    public int sendPhoneCode(String phone,String randUserId){
+    public int sendPhoneCode(String phone,String rand_uuid){
         if(userService.isUserExist(phone)==null){
             userService.registerUser(phone);
         }
         try {
             String code=randomUtils.getPhoneCode();
-            AliYun.sendCode(phone, code);
-            redisService.savePhoneCode(randUserId,code);
+            //AliYun.sendCode(phone, code);
+            redisService.savePhoneCode(rand_uuid,code);
             System.out.println("验证码为:"+code);
         }catch (Exception e){
             e.printStackTrace();
