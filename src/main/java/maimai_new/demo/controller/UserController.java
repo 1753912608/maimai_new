@@ -3,6 +3,7 @@ package maimai_new.demo.controller;
 
 import maimai_new.demo.dao.SessionInfo;
 import maimai_new.demo.dao.rand.randomUtils;
+import maimai_new.demo.dao.user;
 import maimai_new.demo.impl.UserServiceImpl;
 import maimai_new.demo.impl.aliyunUtils.AliYun;
 import maimai_new.demo.impl.redisUtils.RedisServiceImpl;
@@ -86,5 +87,46 @@ public class UserController{
         HttpSession session=request.getSession();
         session.removeAttribute(SessionInfo.USER_ID);
         return 1;
+    }
+
+
+
+    /**
+     *
+     * @param request
+     * @return
+     * 获取当前用户的个人信息
+     */
+    @ResponseBody
+    @RequestMapping("/getMyUserInfo")
+    public user getMyUserInfo(HttpServletRequest request){
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        return userService.getMyUserInfo(user_id);
+    }
+
+    /**
+     *
+     * @param realName
+     * @param sex
+     * @param company
+     * @param position
+     * @param work_direction
+     * @param request
+     * @return
+     * 更新用户中心的基本信息
+     */
+    @ResponseBody
+    @RequestMapping("/updateBasicInfo")
+    public int updateBasicInfo(String realName,
+                               String sex,
+                               String company,
+                               String position,
+                               String work_direction,
+                               HttpServletRequest request)
+    {
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        return userService.updateBasicInfo(realName,sex,company,position,work_direction,user_id);
     }
 }

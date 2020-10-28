@@ -58,23 +58,23 @@
                     </div>
                     <div style="margin-top:60px;margin-left:20px;">
                         <label class="el-info-label">真实姓名:</label>
-                        <span style="margin-left:40px;">肖茗夫</span>
+                        <span style="margin-left:40px;">{{basicInfo.realName}}</span>
                     </div>
                     <div style="margin-top:20px;margin-left:20px;">
                         <label class="el-info-label">您的性别:</label>
-                        <span style="margin-left:40px;">男</span>
+                        <span style="margin-left:40px;">{{basicInfo.sex}}</span>
                     </div>
                     <div style="margin-top:20px;margin-left:20px;">
                         <label class="el-info-label">行业方向:</label>
-                        <span style="margin-left:40px;">IT互联网 研发</span>
+                        <span style="margin-left:40px;">{{basicInfo.value}}&nbsp;{{basicInfo.value1}}</span>
                     </div>
                     <div style="margin-top:20px;margin-left:20px;">
                         <label class="el-info-label">当前公司:</label>
-                        <span style="margin-left:40px;">广州虎牙信息科技有限公司</span>
+                        <span style="margin-left:40px;">{{basicInfo.company}}</span>
                     </div>
                     <div style="margin-top:20px;margin-left:20px;">
                         <label class="el-info-label">当前职位:</label>
-                        <span style="margin-left:40px;">JAVA开发工程师</span>
+                        <span style="margin-left:40px;">{{basicInfo.position}}</span>
                     </div>
                 </div>
                 <!--基本信息的编辑框-->
@@ -84,8 +84,8 @@
                             <el-input v-model="basicInfo.realName" style="width:125px;height:40px;"></el-input>
                         </span>
                         <span style="margin-left:25px;">
-                            <el-radio v-model="basicInfo.sex" label="1" border class="el-input-border">男</el-radio>
-                            <el-radio v-model="basicInfo.sex" label="2" border class="el-input-border" style="margin-left:-30px;">女</el-radio>
+                            <el-radio v-model="basicInfo.sex" label="男" border class="el-input-border">男</el-radio>
+                            <el-radio v-model="basicInfo.sex" label="女" border class="el-input-border" style="margin-left:-30px;">女</el-radio>
                         </span>
                     </div>
                     <div style="margin-top:10px;float:left;">
@@ -119,7 +119,7 @@
                     <div style="margin-top:50px;margin-left:140px;">
                         <span slot="footer" class="dialog-footer">
                           <el-button @click="basicInfo.dialogVisible = false">取 消</el-button>
-                          <el-button type="primary" @click="basicInfo.dialogVisible = false">确 定</el-button>
+                          <el-button type="primary" @click="updateBasicInfo">确 定</el-button>
                         </span>
                     </div>
                 </el-dialog>
@@ -134,8 +134,7 @@
                         </span>
                     </div>
                     <div style="margin-top:60px;margin-left:20px;">
-                        <span><el-button type="primary" round>研发</el-button></span>
-                        <span style="margin-left:20px;"><el-button type="primary" round>社交</el-button></span>
+                        <span style="margin-left:20px;" v-for="item in workTag.myTagList"><el-button type="primary" round>{{item}}</el-button></span>
                     </div>
                 </div>
                 <!--编辑职业标签-->
@@ -289,7 +288,7 @@
         el: '#app',
         data:{
             basicInfo:{
-                realName: '肖茗夫',
+                realName: '',
                 sex: '',
                 work_direction:[{
                       profession: 'IT互联网',
@@ -326,7 +325,6 @@
                 value1: '研发'
             },
             workTag:{
-                tag: [],
                 dialogVisible: false,
                 defaultTagList: ['社交','研发','SNS','Linux系统','iphone开发','移动互联网','Java','前端'],
                 myTagList: ['研发','Java'],
@@ -352,7 +350,7 @@
             }
         },
         created(){
-
+            this.getMyUserInfo();
         },
         methods:{
             test(value,index){
@@ -410,6 +408,42 @@
             layOut(){
                axios.get('/layOut');
                window.location.href="/test_login";
+            },
+            async getMyUserInfo(){
+                let result=await axios.get('/getMyUserInfo');
+                this.basicInfo.realName=result.data.user_real_name;
+                this.basicInfo.sex=result.data.user_sex;
+                this.basicInfo.company=result.data.user_company;
+                this.basicInfo.position=result.data.user_position;
+                this.basicInfo.value=result.data.user_work_direction.split(" ")[0];
+                this.basicInfo.value1=result.data.user_work_direction.split(" ")[1];
+                //this.workTag.myTagList=result.data.user_tag.split(" ");
+            },
+            async updateBasicInfo(){
+                let result=await axios.get('/updateBasicInfo?realName='+this.basicInfo.realName+'&sex='+this.basicInfo.sex+'&company='+this.basicInfo.company+'&position='+this.basicInfo.position+'&work_direction='+this.basicInfo.value+' '+this.basicInfo.value1);
+                if(result.data===1){
+                    this.$message({
+                        showClose: true,
+                        message: '更新基本信息成功',
+                        type: 'success'
+                    });
+                    window.location.href="/center";
+                }else{
+                    this.$message({
+                        showClose: true,
+                        message: '更新个人信息失败',
+                        type: 'error'
+                    });
+                }
+            },
+            updateJobInfo(){
+
+            },
+            updateWorkTag(){
+
+            },
+            updateContactInfo(){
+
             }
         }
     })

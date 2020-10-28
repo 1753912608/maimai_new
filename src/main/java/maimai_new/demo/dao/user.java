@@ -16,6 +16,8 @@ public class user {
     private String user_work_base;
     private String user_resume_url;
 
+    public user(){}
+
     public user(String user_id, String user_password, String user_mail, String user_sex,
                 String user_birth, String user_real_name, String user_work_direction,
                 String user_company, String user_position, String user_tag,
