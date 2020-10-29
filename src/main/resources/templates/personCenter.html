@@ -231,25 +231,29 @@
                     </div>
                     <div style="margin-top:60px;margin-left:20px;">
                         <label class="el-info-label">工作地点:</label>
-                        <span style="margin-left:40px;">北京,海淀区</span>
+                        <span style="margin-left:40px;">{{contactInfo.workBase}}</span>
                     </div>
                     <div style="margin-top:20px;margin-left:20px;">
                         <label class="el-info-label">邮箱:</label>
-                        <span style="margin-left:70px;">1753972608@qq.com</span>
+                        <span style="margin-left:70px;">{{contactInfo.mail}}</span>
                     </div>
                 </div>
                 <!--编辑联系方式-->
-                <el-dialog title="编辑求职信息" :visible.sync="contactInfo.dialogVisible" width="25%">
+                <el-dialog title="编辑联系方式" :visible.sync="contactInfo.dialogVisible" width="25%">
                     <div>
-                        <el-input style="width:300px;border:2px solid #e4e4e4" placeholder="工作地点" v-model="contactInfo.workBase"></el-input>
+                        <el-input style="width:300px;" placeholder="工作地点" v-model="contactInfo.workBase"></el-input>
                     </div>
                     <div style="margin-top:20px;">
-                        <el-input style="width:300px;border:2px solid #e4e4e4" placeholder="邮箱" v-model="contactInfo.mail"></el-input>
+                        <el-input style="width:300px;" placeholder="邮箱" v-model="contactInfo.mail"></el-input>
+                    </div>
+                    <div style="margin-top:20px;">
+                        <el-input v-model="contactInfo.code" placeholder="请输入验证码" style="width:170px;"></el-input>
+                        <el-button type="primary" plain style="margin-left:15px;" @click="sendMailCode" size="medium">{{contactInfo.code_state}}</el-button>
                     </div>
                     <div style="margin-top:70px;margin-left:90px;">
                         <span slot="footer" class="dialog-footer">
                           <el-button @click="contactInfo.dialogVisible = false">取 消</el-button>
-                          <el-button type="primary" @click="contactInfo.dialogVisible = false">保存</el-button>
+                          <el-button type="primary" @click="checkMailCode">保存</el-button>
                         </span>
                     </div>
                 </el-dialog>
@@ -342,7 +346,10 @@
             contactInfo:{
                 workBase: '',
                 mail: '',
-                dialogVisible: false
+                dialogVisible: false,
+                code: '',
+                rand_uuid: '',
+                code_state: '发送验证码'
             },
             resume: {
                 resumeImg: '',
@@ -439,6 +446,8 @@
                 this.workTag.myTagList=result.data.user_tag.split(",");
                 this.jobInfo.education=result.data.user_education;
                 this.jobInfo.expect_Salary=result.data.user_expect_salary;
+                this.contactInfo.workBase=result.data.user_work_base;
+                this.contactInfo.mail=result.data.user_mail;
             },
             async updateBasicInfo(){
                 let result=await axios.get('/updateBasicInfo?realName='+this.basicInfo.realName+'&sex='+this.basicInfo.sex+'&company='+this.basicInfo.company+'&position='+this.basicInfo.position+'&work_direction='+this.basicInfo.value+' '+this.basicInfo.value1);
@@ -448,7 +457,6 @@
                         message: '更新基本信息成功',
                         type: 'success'
                     });
-                    window.location.href="/center";
                 }else{
                     this.$message({
                         showClose: true,
@@ -465,7 +473,6 @@
                         message: '更新求职信息成功',
                         type: 'success'
                     });
-                    window.location.href="/center";
                 }else{
                     this.$message({
                         showClose: true,
@@ -496,11 +503,75 @@
                 this.workTag.dialogVisible=false;
                 this.getMyUserInfo();
             },
-            updateContactInfo(){
-
-            },
             closeMyTagList(index){
                 this.workTag.myTagList.splice(index,1);
+            },
+            async sendMailCode(){
+                this.getUUid();
+                let result=await axios.get('/sendMailCode?rand_uuid='+this.contactInfo.rand_uuid+'&mail='+this.contactInfo.mail);
+                if(result.data===1){
+                    this.$message({
+                        showClose: true,
+                        message: '发送邮箱验证码成功,请注意查收',
+                        type: 'success'
+                    });
+                    let lastTime = 59;
+                    let timer = setInterval(() => {
+                        if(lastTime>0){
+                            this.contactInfo.code_state = lastTime + 's';
+                            lastTime--;
+                        } else {
+                            window.clearInterval(timer);
+                            this.contactInfo.code_state = '发送验证码'
+                        }
+                    }, 1000);
+                }else{
+                    this.$message({
+                        showClose: true,
+                        message: '邮箱格式错误,请输入正确的邮箱',
+                        type: 'error'
+                    });
+                }
+            },
+            async checkMailCode(){
+                if(this.contactInfo.code.length===0){
+                    this.$message({
+                        showClose: true,
+                        message: '验证码不能为空',
+                        type: 'warning'
+                    });
+                }else if(this.contactInfo.mail.length===0||this.contactInfo.workBase.length===0){
+                    this.$message({
+                        showClose: true,
+                        message: '联系方式不能为空',
+                        type: 'warning'
+                    });
+                }else{
+                    let result=await axios.get('/checkMailCode?rand_uuid='+this.contactInfo.rand_uuid+'&mailCode='+this.contactInfo.code+'&mail='+this.contactInfo.mail+'&workBase='+this.contactInfo.workBase);
+                    if(result.data===1){
+                        this.$message({
+                            showClose: true,
+                            message: '更新联系方式成功',
+                            type: 'success'
+                        });
+                    }else{
+                        this.$message({
+                            showClose: true,
+                            message: '更新联系方式失败',
+                            type: 'error'
+                        });
+                    }
+                    this.contactInfo.dialogVisible=false;
+                }
+                this.contactInfo.dialogVisible=false;
+                this.getMyUserInfo();
+            },
+            getUUid(){
+                let rand_uuid='';
+                for(let i=0;i<20;i++){
+                    rand_uuid+=Math.floor(Math.random()*26)+'a';
+                }
+                this.contactInfo.rand_uuid=rand_uuid;
             }
         }
     })

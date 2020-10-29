@@ -82,4 +82,17 @@ public interface UserMapper {
      */
     @Update("update user set user_education=#{education},user_expect_Salary=#{expect_Salary} where user_id=#{user_id}")
     void updateJobInfo(String education,String expect_Salary,String user_id);
+
+
+
+
+    /**
+     *
+     * @param mail
+     * @param workBase
+     * @param user_id
+     * 更新用户联系方式
+     */
+    @Update("update user set user_mail=#{mail},user_work_base=#{workBase} where user_id=#{user_id}")
+    void updateContactInfo(String mail,String workBase,String user_id);
 }

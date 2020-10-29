@@ -73,4 +73,17 @@ public interface UserService {
      * 更新用户求职信息
      */
     int updateJobInfo(String education,String expect_Salary,String user_id);
+
+
+
+
+    /**
+     *
+     * @param mail
+     * @param workBase
+     * @param user_id
+     * @return
+     * 更新用户联系方式信息
+     */
+    int updateContactInfo(String mail,String workBase,String user_id);
 }

@@ -62,4 +62,15 @@ public class UserServiceImpl implements UserService{
         }
         return 1;
     }
+
+    @Override
+    public int updateContactInfo(String mail, String workBase, String user_id) {
+        try{
+            userMapper.updateContactInfo(mail,workBase,user_id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+        return 1;
+    }
 }

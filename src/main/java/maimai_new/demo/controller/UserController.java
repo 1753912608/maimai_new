@@ -6,6 +6,7 @@ import maimai_new.demo.dao.rand.randomUtils;
 import maimai_new.demo.dao.user;
 import maimai_new.demo.impl.UserServiceImpl;
 import maimai_new.demo.impl.aliyunUtils.AliYun;
+import maimai_new.demo.impl.mailUtils.mailDemoUtils;
 import maimai_new.demo.impl.redisUtils.RedisServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,8 @@ public class UserController{
     @Autowired
     private RedisServiceImpl redisService;
 
+    @Autowired
+    private mailDemoUtils mailDemo;
 
     /**
      *
@@ -178,5 +181,61 @@ public class UserController{
 
 
 
+    /**
+     *
+     * @param rand_uuid
+     * @param mail
+     * @return
+     * 绑定邮箱发送邮箱验证码
+     */
+    @ResponseBody
+    @RequestMapping("/sendMailCode")
+    public int sendMailCode(String rand_uuid,
+                            String mail,
+                            HttpServletRequest request)
+    {
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        try{
+            String code=randomUtils.getPhoneCode();
+            mailDemo.sendMailCode(mail,user_id,code);
+            redisService.savePhoneCode(rand_uuid,code);
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+        return 1;
+    }
+
+
+
+    /**
+     *
+     * @param rand_uuid
+     * @param mailCode
+     * @param mail
+     * @param workBase
+     * @param request
+     * @return
+     * 校验邮箱验证码
+     */
+    @ResponseBody
+    @RequestMapping("/checkMailCode")
+    public int checkMailCode(String rand_uuid,
+                             String mailCode,
+                             String mail,
+                             String workBase,
+                             HttpServletRequest request)
+    {
+        System.out.println(mailCode+' '+mail+' '+workBase);
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        if(!redisService.getPhoneCode(rand_uuid).equals(mailCode)){
+            return 0;
+        }else{
+            userService.updateContactInfo(mail,workBase,user_id);
+        }
+        return 1;
+    }
 
 }
