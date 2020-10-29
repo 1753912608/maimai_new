@@ -46,4 +46,31 @@ public interface UserService {
      * 更新用户基本信息
      */
     int updateBasicInfo(String realName,String sex,String company,String position,String work_direction,String user_id);
+
+
+
+
+
+    /**
+     *
+     * @param workTag
+     * @param user_id
+     * @return
+     * 更新用户标签
+     */
+    int updateWorkTag(String workTag,String user_id);
+
+
+
+
+
+    /**
+     *
+     * @param education
+     * @param expect_Salary
+     * @param user_id
+     * @return
+     * 更新用户求职信息
+     */
+    int updateJobInfo(String education,String expect_Salary,String user_id);
 }

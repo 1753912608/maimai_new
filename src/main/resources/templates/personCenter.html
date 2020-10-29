@@ -143,6 +143,7 @@
                         <el-tag
                                 v-for="(tag,index) in workTag.myTagList"
                                 closable
+                                @close="closeMyTagList(index)"
                                 style="width:100px;margin-left:10px;">
                             {{tag}}
                         </el-tag>
@@ -164,7 +165,7 @@
                     <div style="margin-top:50px;margin-left:200px;">
                         <span slot="footer" class="dialog-footer">
                           <el-button @click="workTag.dialogVisible = false">取 消</el-button>
-                          <el-button type="primary" @click="workTag.dialogVisible = false">保存</el-button>
+                          <el-button type="primary" @click="updateWorkTag">保存</el-button>
                         </span>
                     </div>
                 </el-dialog>
@@ -180,15 +181,16 @@
                     </div>
                     <div style="margin-top:60px;margin-left:20px;">
                         <label class="el-info-label">学历:</label>
-                        <span style="margin-left:70px;">其他</span>
+                        <span style="margin-left:70px;">{{jobInfo.education}}</span>
                     </div>
                     <div style="margin-top:20px;margin-left:20px;">
                         <label class="el-info-label">期望薪资:</label>
-                        <span style="margin-left:40px;">未知</span>
+                        <span style="margin-left:40px;">{{jobInfo.expect_Salary}}</span>
                     </div>
                 </div>
+                <!--编辑求职信息-->
                 <el-dialog title="编辑求职信息" :visible.sync="jobInfo.dialogVisible" width="25%">
-                    <div style="margin-top:10px;float:left;margin-left:50px;">
+                    <div style="margin-top:10px;float:left;margin-left:40px;">
                         <el-dropdown split-button>
                             {{jobInfo.education}}
                             <el-dropdown-menu slot="dropdown" style="width:100px;">
@@ -199,7 +201,7 @@
                             </el-dropdown-menu>
                         </el-dropdown>
                     </div>
-                    <div style="float:left;margin-left:40px;margin-top:10px;">
+                    <div style="float:left;margin-left:20px;margin-top:10px;">
                         <el-dropdown split-button>
                             {{jobInfo.expect_Salary}}
                             <el-dropdown-menu slot="dropdown" style="width:150px;">
@@ -213,7 +215,7 @@
                     <div style="margin-top:70px;margin-left:90px;">
                         <span slot="footer" class="dialog-footer">
                           <el-button @click="jobInfo.dialogVisible = false">取 消</el-button>
-                          <el-button type="primary" @click="jobInfo.dialogVisible = false">保存</el-button>
+                          <el-button type="primary" @click="updateJobInfo">保存</el-button>
                         </span>
                     </div>
                 </el-dialog>
@@ -327,13 +329,13 @@
             workTag:{
                 dialogVisible: false,
                 defaultTagList: ['社交','研发','SNS','Linux系统','iphone开发','移动互联网','Java','前端'],
-                myTagList: ['研发','Java'],
+                myTagList: [],
                 tagInput: ''
             },
             jobInfo:{
-                education: '本科',
+                education: '',
                 educationList: ['本科','专科','硕士','博士','博士后','其他'],
-                expect_Salary: '未知',
+                expect_Salary: '',
                 expect_SalaryList: ['3000及以下/月','3000-7000/月','7000-15000/月','15000-30000/月','30000以上/月'],
                 dialogVisible: false
             },
@@ -379,12 +381,29 @@
                 this.contactInfo.dialogVisible=true;
             },
             pushMyListByDefault(index){
-                this.workTag.myTagList.push(this.workTag.defaultTagList[index]);
-                this.workTag.defaultTagList.splice(index,1);
+                if(this.workTag.myTagList.length>=6){
+                    this.$message({
+                        showClose: true,
+                        message: '职业标签个数不能超过6个',
+                        type: 'warning'
+                    });
+                }
+                else{
+                    this.workTag.myTagList.push(this.workTag.defaultTagList[index]);
+                    this.workTag.defaultTagList.splice(index,1);
+                }
             },
             pushMyListByInput(){
-                this.workTag.myTagList.push(this.workTag.tagInput);
-                this.workTag.tagInput='';
+                if(this.workTag.myTagList.length>=6){
+                    this.$message({
+                        showClose: true,
+                        message: '职业标签个数不能超过6个',
+                        type: 'warning'
+                    });
+                }else{
+                    this.workTag.myTagList.push(this.workTag.tagInput);
+                    this.workTag.tagInput='';
+                }
             },
             upload(){
                 let fileName=document.getElementById("uploadBtn").files[0].name;
@@ -417,7 +436,9 @@
                 this.basicInfo.position=result.data.user_position;
                 this.basicInfo.value=result.data.user_work_direction.split(" ")[0];
                 this.basicInfo.value1=result.data.user_work_direction.split(" ")[1];
-                //this.workTag.myTagList=result.data.user_tag.split(" ");
+                this.workTag.myTagList=result.data.user_tag.split(",");
+                this.jobInfo.education=result.data.user_education;
+                this.jobInfo.expect_Salary=result.data.user_expect_salary;
             },
             async updateBasicInfo(){
                 let result=await axios.get('/updateBasicInfo?realName='+this.basicInfo.realName+'&sex='+this.basicInfo.sex+'&company='+this.basicInfo.company+'&position='+this.basicInfo.position+'&work_direction='+this.basicInfo.value+' '+this.basicInfo.value1);
@@ -436,14 +457,50 @@
                     });
                 }
             },
-            updateJobInfo(){
-
+            async updateJobInfo(){
+                let result=await axios.get('/updateJobInfo?education='+this.jobInfo.education+'&expect_Salary='+this.jobInfo.expect_Salary);
+                if(result.data===1){
+                    this.$message({
+                        showClose: true,
+                        message: '更新求职信息成功',
+                        type: 'success'
+                    });
+                    window.location.href="/center";
+                }else{
+                    this.$message({
+                        showClose: true,
+                        message: '更新求职信息失败',
+                        type: 'error'
+                    });
+                }
+                this.jobInfo.dialogVisible=false;
+                this.getMyUserInfo();
             },
-            updateWorkTag(){
-
+            async updateWorkTag(){
+                let workTagArr=this.workTag.myTagList.join(",");
+                let result=await axios.get('/updateWorkTag?workTag='+workTagArr);
+                if(result.data===1){
+                    this.$message({
+                        showClose: true,
+                        message: '更新职业标签成功',
+                        type: 'success'
+                    });
+                    window.location.href="/center";
+                }else{
+                    this.$message({
+                        showClose: true,
+                        message: '更新职业标签失败',
+                        type: 'error'
+                    });
+                }
+                this.workTag.dialogVisible=false;
+                this.getMyUserInfo();
             },
             updateContactInfo(){
 
+            },
+            closeMyTagList(index){
+                this.workTag.myTagList.splice(index,1);
             }
         }
     })

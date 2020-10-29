@@ -55,4 +55,31 @@ public interface UserMapper {
      */
     @Update("update user set user_real_name=#{realName},user_sex=#{sex},user_position=#{position},user_company=#{company},user_work_direction=#{work_direction} where user_id=#{user_id}")
     void updateBasicInfo(String realName,String sex,String company,String position,String work_direction,String user_id);
+
+
+
+
+
+    /**
+     *
+     * @param workTag
+     * @param user_id
+     * 更新用户职业标签
+     */
+    @Update("update user set user_tag=#{workTag} where user_id=#{user_id}")
+    void updateWorkTag(String workTag,String user_id);
+
+
+
+
+
+    /**
+     *
+     * @param education
+     * @param expect_Salary
+     * @param user_id
+     * 更新用户求职信息
+     */
+    @Update("update user set user_education=#{education},user_expect_Salary=#{expect_Salary} where user_id=#{user_id}")
+    void updateJobInfo(String education,String expect_Salary,String user_id);
 }

@@ -40,4 +40,26 @@ public class UserServiceImpl implements UserService{
     public user getMyUserInfo(String user_id) {
         return userMapper.getMyUserInfo(user_id);
     }
+
+    @Override
+    public int updateWorkTag(String workTag, String user_id) {
+        try{
+            userMapper.updateWorkTag(workTag,user_id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+        return 1;
+    }
+
+    @Override
+    public int updateJobInfo(String education, String expect_Salary, String user_id) {
+        try{
+            userMapper.updateJobInfo(education,expect_Salary,user_id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+        return 1;
+    }
 }

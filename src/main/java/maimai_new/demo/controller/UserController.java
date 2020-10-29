@@ -105,6 +105,9 @@ public class UserController{
         return userService.getMyUserInfo(user_id);
     }
 
+
+
+
     /**
      *
      * @param realName
@@ -129,4 +132,51 @@ public class UserController{
         String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
         return userService.updateBasicInfo(realName,sex,company,position,work_direction,user_id);
     }
+
+
+
+
+    /**
+     *
+     * @param workTag
+     * @param request
+     * @return
+     * 更新用户的职业标签
+     */
+    @ResponseBody
+    @RequestMapping("/updateWorkTag")
+    public int updateWorkTag(String workTag,
+                             HttpServletRequest request)
+    {
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        return userService.updateWorkTag(workTag,user_id);
+    }
+
+
+
+
+    /**
+     *
+     * @param education
+     * @param expect_Salary
+     * @param request
+     * @return
+     * 更新用户求职信息
+     */
+    @ResponseBody
+    @RequestMapping("/updateJobInfo")
+    public int updateJobInfo(String education,
+                             String expect_Salary,
+                             HttpServletRequest request)
+    {
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        return userService.updateJobInfo(education,expect_Salary,user_id);
+    }
+
+
+
+
+
 }
