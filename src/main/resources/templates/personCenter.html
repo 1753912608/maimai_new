@@ -412,7 +412,7 @@
                     this.workTag.tagInput='';
                 }
             },
-            upload(){
+            async upload(){
                 let fileName=document.getElementById("uploadBtn").files[0].name;
                 if(fileName.substring(fileName.lastIndexOf('.')+1)==='pdf'){
                     this.resume.resumeImg='/img/pdf.png';
@@ -427,6 +427,28 @@
                 let date=new Date();
                 this.resume.resumeTime=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDay()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
                 this.resume.resumeState='block';
+                let params=new FormData();
+                params.append("resume",document.getElementById("uploadBtn").files[0]);
+                let result=await axios({
+                    method: 'post',
+                    url: '/uploadResume',
+                    data: params,
+                    headers:{
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
+                if(result.data===1){
+                    this.$message({
+                        type: 'success',
+                        message: '更新用户简历附件成功'
+                    });
+                }else{
+                    this.$message({
+                        type: 'info',
+                        message: '更新用户简历附件失败'
+                    });
+                }
+                this.getMyUserInfo();
             },
             removeResume(){
 

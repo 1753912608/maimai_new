@@ -86,4 +86,17 @@ public interface UserService {
      * 更新用户联系方式信息
      */
     int updateContactInfo(String mail,String workBase,String user_id);
+
+
+
+
+
+    /**
+     *
+     * @param user_resume_url
+     * @param user_id
+     * @return
+     * 更新用户简历的存储url
+     */
+    int uploadResume(String user_resume_url,String user_id);
 }

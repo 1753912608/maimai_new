@@ -8,12 +8,19 @@ import maimai_new.demo.impl.UserServiceImpl;
 import maimai_new.demo.impl.aliyunUtils.AliYun;
 import maimai_new.demo.impl.mailUtils.mailDemoUtils;
 import maimai_new.demo.impl.redisUtils.RedisServiceImpl;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 public class UserController{
@@ -227,7 +234,6 @@ public class UserController{
                              String workBase,
                              HttpServletRequest request)
     {
-        System.out.println(mailCode+' '+mail+' '+workBase);
         HttpSession session=request.getSession();
         String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
         if(!redisService.getPhoneCode(rand_uuid).equals(mailCode)){
@@ -236,6 +242,30 @@ public class UserController{
             userService.updateContactInfo(mail,workBase,user_id);
         }
         return 1;
+    }
+
+
+
+
+    /**
+     *
+     * @param resume
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @ResponseBody
+    @RequestMapping(value = "uploadResume",method = RequestMethod.POST)
+    public int uploadResume(@RequestParam("resume")MultipartFile resume,
+                            HttpServletRequest request)
+            throws IOException
+    {
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        String fileSrc="";
+        fileSrc="file/"+resume.getOriginalFilename();
+        FileUtils.copyInputStreamToFile(resume.getInputStream(),new File("src/main/resources/static/"+fileSrc));
+        return userService.uploadResume(fileSrc,user_id);
     }
 
 }

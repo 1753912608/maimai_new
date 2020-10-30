@@ -73,4 +73,15 @@ public class UserServiceImpl implements UserService{
         }
         return 1;
     }
+
+    @Override
+    public int uploadResume(String user_resume_url, String user_id) {
+        try{
+            userMapper.uploadResume(user_resume_url,user_id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+        return 1;
+    }
 }
