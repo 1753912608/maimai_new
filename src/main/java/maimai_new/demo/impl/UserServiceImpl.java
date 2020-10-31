@@ -75,9 +75,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public int uploadResume(String user_resume_url, String user_id) {
+    public int uploadResume(String user_resume_url, String resume_name, String resume_upload_time, String user_id) {
         try{
-            userMapper.uploadResume(user_resume_url,user_id);
+            userMapper.uploadResume(user_resume_url,resume_name,resume_upload_time,user_id);
         }catch (Exception e){
             e.printStackTrace();
             return 0;

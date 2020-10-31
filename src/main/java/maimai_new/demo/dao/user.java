@@ -15,6 +15,8 @@ public class user {
     private int user_expect_salary;
     private String user_work_base;
     private String user_resume_url;
+    private String user_resume_name;
+    private String user_resume_upload_time;
 
     public user(){}
 
@@ -22,7 +24,7 @@ public class user {
                 String user_birth, String user_real_name, String user_work_direction,
                 String user_company, String user_position, String user_tag,
                 String user_education, int user_expect_salary, String user_work_base,
-                String user_resume_url) {
+                String user_resume_url,String user_resume_name,String user_resume_upload_time) {
         this.user_id = user_id;
         this.user_password = user_password;
         this.user_mail = user_mail;
@@ -37,6 +39,8 @@ public class user {
         this.user_expect_salary = user_expect_salary;
         this.user_work_base = user_work_base;
         this.user_resume_url = user_resume_url;
+        this.user_real_name=user_resume_name;
+        this.user_resume_upload_time=user_resume_upload_time;
     }
 
     public void setUser_id(String user_id) {
@@ -149,5 +153,21 @@ public class user {
 
     public String getUser_resume_url() {
         return user_resume_url;
+    }
+
+    public String getUser_resume_name() {
+        return user_resume_name;
+    }
+
+    public void setUser_resume_name(String user_resume_name) {
+        this.user_resume_name = user_resume_name;
+    }
+
+    public String getUser_resume_upload_time() {
+        return user_resume_upload_time;
+    }
+
+    public void setUser_resume_upload_time(String user_resume_upload_time) {
+        this.user_resume_upload_time = user_resume_upload_time;
     }
 }

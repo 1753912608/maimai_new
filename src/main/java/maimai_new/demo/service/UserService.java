@@ -90,13 +90,14 @@ public interface UserService {
 
 
 
-
     /**
      *
      * @param user_resume_url
+     * @param resume_name
+     * @param resume_upload_time
      * @param user_id
      * @return
      * 更新用户简历的存储url
      */
-    int uploadResume(String user_resume_url,String user_id);
+    int uploadResume(String user_resume_url,String resume_name,String resume_upload_time,String user_id);
 }

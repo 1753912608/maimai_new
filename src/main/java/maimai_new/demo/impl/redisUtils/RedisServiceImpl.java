@@ -1,6 +1,7 @@
 package maimai_new.demo.impl.redisUtils;
 
 
+import maimai_new.demo.dao.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,31 @@ public class RedisServiceImpl {
      */
     public String getPhoneCode(String rand_uuid){
         return (String)redisTemplate.opsForValue().get(rand_uuid);
+    }
+
+
+
+
+    /**
+     *
+     * @param user_id
+     * @param u
+     * 存储当前用户的个人信息
+     */
+    public void saveUserInfo(String user_id, user u){
+        redisTemplate.opsForValue().set(user_id,u);
+    }
+
+
+
+
+    /**
+     *
+     * @param user_id
+     * @return
+     * 获取当前用户存储的个人信息
+     */
+    public user getUserInfo(String user_id){
+        return (user) redisTemplate.opsForValue().get(user_id);
     }
 }

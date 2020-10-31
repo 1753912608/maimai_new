@@ -102,9 +102,11 @@ public interface UserMapper {
     /**
      *
      * @param user_resume_url
+     * @param resume_name
+     * @param time
      * @param user_id
      * 更新用户简历的存储url
      */
-    @Update("update user set user_resume_url=#{user_resume_url} where user_id=#{user_id}")
-    void uploadResume(String user_resume_url,String user_id);
+    @Update("update user set user_resume_url=#{user_resume_url},user_resume_name=#{resume_name},user_resume_upload_time=#{time} where user_id=#{user_id}")
+    void uploadResume(String user_resume_url,String resume_name,String time,String user_id);
 }

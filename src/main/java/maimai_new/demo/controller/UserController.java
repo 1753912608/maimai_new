@@ -79,6 +79,7 @@ public class UserController{
         if(redisService.getPhoneCode(rand_uuid).equals(code)){
             HttpSession session=request.getSession();
             session.setAttribute(SessionInfo.USER_ID,phone);
+            redisService.saveUserInfo(phone,userService.getMyUserInfo(phone));
             return 1;
         }
         return 0;
@@ -112,7 +113,7 @@ public class UserController{
     public user getMyUserInfo(HttpServletRequest request){
         HttpSession session=request.getSession();
         String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
-        return userService.getMyUserInfo(user_id);
+        return redisService.getUserInfo(user_id);
     }
 
 
@@ -140,7 +141,12 @@ public class UserController{
     {
         HttpSession session=request.getSession();
         String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
-        return userService.updateBasicInfo(realName,sex,company,position,work_direction,user_id);
+        if(userService.updateBasicInfo(realName,sex,company,position,work_direction,user_id)==1){
+            redisService.saveUserInfo(user_id,userService.getMyUserInfo(user_id));
+        }else{
+            return 0;
+        }
+        return 1;
     }
 
 
@@ -160,7 +166,12 @@ public class UserController{
     {
         HttpSession session=request.getSession();
         String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
-        return userService.updateWorkTag(workTag,user_id);
+        if(userService.updateWorkTag(workTag,user_id)==1){
+            redisService.saveUserInfo(user_id,userService.getMyUserInfo(user_id));
+        }else{
+            return 0;
+        }
+        return 1;
     }
 
 
@@ -182,7 +193,12 @@ public class UserController{
     {
         HttpSession session=request.getSession();
         String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
-        return userService.updateJobInfo(education,expect_Salary,user_id);
+        if(userService.updateJobInfo(education,expect_Salary,user_id)==1){
+            redisService.saveUserInfo(user_id,userService.getMyUserInfo(user_id));
+        }else{
+            return 0;
+        }
+        return 1;
     }
 
 
@@ -257,6 +273,8 @@ public class UserController{
     @ResponseBody
     @RequestMapping(value = "uploadResume",method = RequestMethod.POST)
     public int uploadResume(@RequestParam("resume")MultipartFile resume,
+                            @RequestParam("resume_name")String resume_name,
+                            @RequestParam("resume_upload_time")String resume_upload_time,
                             HttpServletRequest request)
             throws IOException
     {
@@ -265,7 +283,31 @@ public class UserController{
         String fileSrc="";
         fileSrc="file/"+resume.getOriginalFilename();
         FileUtils.copyInputStreamToFile(resume.getInputStream(),new File("src/main/resources/static/"+fileSrc));
-        return userService.uploadResume(fileSrc,user_id);
+        if(userService.uploadResume(fileSrc,resume_name,resume_upload_time,user_id)==1){
+            redisService.saveUserInfo(user_id,userService.getMyUserInfo(user_id));
+        }else{
+            return 0;
+        }
+        return 1;
+    }
+
+
+
+
+    /**
+     *
+     * @param request
+     * @return
+     * 将用户上传的简历附件删除
+     */
+    @ResponseBody
+    @RequestMapping("/removeResume")
+    public int removeResume(HttpServletRequest request)
+    {
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+
+        return 1;
     }
 
 }

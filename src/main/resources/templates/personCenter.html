@@ -425,10 +425,11 @@
                 }
                 this.resume.resumeName=fileName;
                 let date=new Date();
-                this.resume.resumeTime=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDay()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
-                this.resume.resumeState='block';
+                this.resume.resumeTime=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
                 let params=new FormData();
                 params.append("resume",document.getElementById("uploadBtn").files[0]);
+                params.append("resume_name",this.resume.resumeName);
+                params.append("resume_upload_time",this.resume.resumeTime);
                 let result=await axios({
                     method: 'post',
                     url: '/uploadResume',
@@ -442,6 +443,7 @@
                         type: 'success',
                         message: '更新用户简历附件成功'
                     });
+                    this.resume.resumeState='block';
                 }else{
                     this.$message({
                         type: 'info',
@@ -470,6 +472,18 @@
                 this.jobInfo.expect_Salary=result.data.user_expect_salary;
                 this.contactInfo.workBase=result.data.user_work_base;
                 this.contactInfo.mail=result.data.user_mail;
+                this.resume.resumeName=result.data.user_resume_name;
+                this.resume.resumeTime=result.data.user_resume_upload_time;
+                if(this.resume.resumeName.substring(this.resume.resumeName.lastIndexOf('.')+1)==='pdf'){
+                    this.resume.resumeImg='/img/pdf.png';
+                }else if(this.resume.resumeName.substring(this.resume.resumeName.lastIndexOf('.')+1)==='doc'){
+                    this.resume.resumeImg='/img/doc.png';
+                }else if(this.resume.resumeName.substring(this.resume.resumeName.lastIndexOf('.')+1)==='docx'){
+                    this.resume.resumeImg='/img/doc.png';
+                }else if(this.resume.resumeName.substring(this.resume.resumeName.lastIndexOf('.')+1)==='png'){
+                    this.resume.resumeImg='/img/png.png';
+                }
+                if(this.resume.resumeName.length>0)this.resume.resumeState='block';
             },
             async updateBasicInfo(){
                 let result=await axios.get('/updateBasicInfo?realName='+this.basicInfo.realName+'&sex='+this.basicInfo.sex+'&company='+this.basicInfo.company+'&position='+this.basicInfo.position+'&work_direction='+this.basicInfo.value+' '+this.basicInfo.value1);
