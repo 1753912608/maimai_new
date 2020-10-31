@@ -280,7 +280,7 @@
                             <div style="margin-top:5px;color:rgb(120,120,120)">{{resume.resumeTime}}上传</div>
                         </div>
                         <div style="float:left;margin-left:50px;margin-top:50px;">
-                            <a href="javascript:void(0);" style="text-decoration:none;color:rgb(120,120,120)">删除</a>
+                            <a href="javascript:void(0);" style="text-decoration:none;color:rgb(120,120,120)" @click="removeResume">删除</a>
                         </div>
                     </div>
                 </div>
@@ -452,8 +452,22 @@
                 }
                 this.getMyUserInfo();
             },
-            removeResume(){
-
+            async removeResume(){
+                let result=await axios.get('/removeResume');
+                if(result.data===1){
+                    this.$message({
+                        type: 'success',
+                        message: '删除简历附件成功'
+                    });
+                    this.resume.resumeState='block';
+                }else{
+                    this.$message({
+                        type: 'info',
+                        message: '删除简历附件失败'
+                    });
+                }
+                this.resume.resumeState='none';
+                this.getMyUserInfo();
             },
             layOut(){
                axios.get('/layOut');

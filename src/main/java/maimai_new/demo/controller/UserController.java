@@ -306,7 +306,17 @@ public class UserController{
     {
         HttpSession session=request.getSession();
         String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
-
+        String resume_url=redisService.getUserInfo(user_id).getUser_resume_url();
+        try {
+            FileUtils.forceDeleteOnExit(new File("src/main/resources/static/"+resume_url));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(userService.uploadResume("","","",user_id)==1){
+            redisService.saveUserInfo(user_id,userService.getMyUserInfo(user_id));
+        }else{
+            return 0;
+        }
         return 1;
     }
 
