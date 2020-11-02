@@ -65,8 +65,10 @@
                         </span>
                     </div>
                     <div style="margin-top:60px;margin-left:20px;">
-                        <label class="el-info-label">真实姓名:</label>
-                        <span style="margin-left:40px;">{{basicInfo.realName}}</span>
+                        <div>
+                            <label class="el-info-label">真实姓名:</label>
+                            <span style="margin-left:40px;">{{basicInfo.realName}}</span>
+                        </div>
                     </div>
                     <div style="margin-top:20px;margin-left:20px;">
                         <label class="el-info-label">您的性别:</label>
@@ -84,9 +86,12 @@
                         <label class="el-info-label">当前职位:</label>
                         <span style="margin-left:40px;">{{basicInfo.position}}</span>
                     </div>
+                    <div style="float:left;margin-left:550px;margin-top:-180px;">
+                        <img src="/img/head.jpg" alt="" width="140px" height="140px" class="el-info-img">
+                    </div>
                 </div>
                 <!--基本信息的编辑框-->
-                <el-dialog title="编辑基本信息" :visible.sync="basicInfo.dialogVisible" width="25%">
+                <el-dialog title="编辑基本信息" :visible.sync="basicInfo.dialogVisible" width="40%">
                     <div style="margin-top:10px;">
                         <span>
                             <el-input v-model="basicInfo.realName" style="width:125px;height:40px;"></el-input>
@@ -118,7 +123,13 @@
                             </el-dropdown-menu>
                         </el-dropdown>
                     </div>
-                    <div style="margin-top:60px;">
+                    <div style="margin-left:360px;margin-top:-20px;">
+                        <div><img src="/img/head.jpg" alt="" width="120px" height="120px"></div>
+                        <div style="margin-left:20px;margin-top:5px;">
+
+                        </div>
+                    </div>
+                    <div style="margin-top:-40px;">
                         <el-input v-model="basicInfo.company" style="width:305px;height:40px;" placeholder="当前公司"></el-input>
                     </div>
                     <div style="margin-top:10px;">
@@ -336,7 +347,8 @@
                 selectedProfessionIndex: 0,
                 selectedMajorIndex: 0,
                 value:'IT互联网',
-                value1: '研发'
+                value1: '研发',
+                headImg: ''
             },
             workTag:{
                 dialogVisible: false,
@@ -525,6 +537,7 @@
                         type: 'error'
                     });
                 }
+                this.basicInfo.dialogVisible=false;
             },
             async updateJobInfo(){
                 let result=await axios.get('/updateJobInfo?education='+this.jobInfo.education+'&expect_Salary='+this.jobInfo.expect_Salary);
