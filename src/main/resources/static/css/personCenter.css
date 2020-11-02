@@ -62,3 +62,15 @@
     visibility:visible;
     cursor:pointer;
 }
+.el-account-btn{
+    margin-left:510px;
+    margin-top:-30px;
+    width:80px;
+    height:30px;
+    background-color:#fff0de;
+    border:1px solid #ff8500;
+    border-radius:8px;
+    color:#ff8500;
+    padding-left:30px;
+    padding-top:10px;
+}
