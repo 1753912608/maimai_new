@@ -28,8 +28,8 @@ public interface UserMapper {
      * @return
      * 新用户注册
      */
-    @Insert("insert into user(user_id) values(#{phone})")
-    void registerUser(String phone);
+    @Insert("insert into user(user_id,user_head_img) values(#{phone},#{user_head_img})")
+    void registerUser(String phone,String user_head_img);
 
 
 

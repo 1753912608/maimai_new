@@ -29,4 +29,9 @@ public class PageController {
     public String mychat(){
         return "chat";
     }
+
+    @RequestMapping("/test_authentication")
+    public String authentication(){
+        return "authentication";
+    }
 }

@@ -20,7 +20,7 @@ public interface UserService {
      * @param phone
      * 新用户注册
      */
-    void registerUser(String phone);
+    void registerUser(String phone,String init_head_img);
 
 
 

@@ -50,7 +50,7 @@ public class UserController{
     @RequestMapping("/sendPhoneCode")
     public int sendPhoneCode(String phone,String rand_uuid){
         if(userService.isUserExist(phone)==null){
-            userService.registerUser(phone);
+            userService.registerUser(phone,"file/init_head.jpg");
         }
         try {
             String code=randomUtils.getPhoneCode();
