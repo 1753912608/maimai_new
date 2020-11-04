@@ -6,6 +6,7 @@ import maimai_new.demo.dao.rand.randomUtils;
 import maimai_new.demo.dao.user;
 import maimai_new.demo.impl.UserServiceImpl;
 import maimai_new.demo.impl.aliyunUtils.AliYun;
+import maimai_new.demo.impl.fileUtils.fileServiceImpl;
 import maimai_new.demo.impl.mailUtils.mailDemoUtils;
 import maimai_new.demo.impl.redisUtils.RedisServiceImpl;
 import org.apache.commons.io.FileUtils;
@@ -34,6 +35,9 @@ public class UserController{
 
     @Autowired
     private mailDemoUtils mailDemo;
+
+    @Autowired
+    private fileServiceImpl fileService;
 
     /**
      *
@@ -127,21 +131,25 @@ public class UserController{
      * @param position
      * @param work_direction
      * @param request
+     * @param head_img
      * @return
      * 更新用户中心的基本信息
      */
     @ResponseBody
-    @RequestMapping("/updateBasicInfo")
-    public int updateBasicInfo(String realName,
-                               String sex,
-                               String company,
-                               String position,
-                               String work_direction,
-                               HttpServletRequest request)
+    @RequestMapping(value = "updateBasicInfo",method = RequestMethod.POST)
+    public int updateBasicInfo(@RequestParam("realName") String realName,
+                               @RequestParam("sex") String sex,
+                               @RequestParam("company") String company,
+                               @RequestParam("position") String position,
+                               @RequestParam("work_direction") String work_direction,
+                               @RequestParam("head_img") MultipartFile head_img,
+                               HttpServletRequest request)throws IOException
     {
         HttpSession session=request.getSession();
         String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
-        if(userService.updateBasicInfo(realName,sex,company,position,work_direction,user_id)==1){
+        fileService.saveOneFile("",head_img);
+        String fileSrc="file/"+head_img.getOriginalFilename();
+        if(userService.updateBasicInfo(realName,sex,company,position,work_direction,fileSrc,user_id)==1){
             redisService.saveUserInfo(user_id,userService.getMyUserInfo(user_id));
         }else{
             return 0;
@@ -269,6 +277,7 @@ public class UserController{
      * @param request
      * @return
      * @throws IOException
+     * 更新个人简历附件
      */
     @ResponseBody
     @RequestMapping(value = "uploadResume",method = RequestMethod.POST)
@@ -280,9 +289,8 @@ public class UserController{
     {
         HttpSession session=request.getSession();
         String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
-        String fileSrc="";
-        fileSrc="file/"+resume.getOriginalFilename();
-        FileUtils.copyInputStreamToFile(resume.getInputStream(),new File("src/main/resources/static/"+fileSrc));
+        String fileSrc="file/"+resume.getOriginalFilename();
+        fileService.saveOneFile("",resume);
         if(userService.uploadResume(fileSrc,resume_name,resume_upload_time,user_id)==1){
             redisService.saveUserInfo(user_id,userService.getMyUserInfo(user_id));
         }else{

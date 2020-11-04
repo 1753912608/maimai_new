@@ -45,7 +45,7 @@ public interface UserService {
      * @param user_id
      * 更新用户基本信息
      */
-    int updateBasicInfo(String realName,String sex,String company,String position,String work_direction,String user_id);
+    int updateBasicInfo(String realName,String sex,String company,String position,String work_direction,String head_img,String user_id);
 
 
 

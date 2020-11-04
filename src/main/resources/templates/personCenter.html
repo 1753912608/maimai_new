@@ -87,7 +87,7 @@
                         <span style="margin-left:40px;">{{basicInfo.position}}</span>
                     </div>
                     <div style="float:left;margin-left:550px;margin-top:-180px;">
-                        <img src="/img/head.jpg" alt="" width="140px" height="140px" class="el-info-img">
+                        <img :src="basicInfo.headImg" alt="" width="140px" height="140px" class="el-info-img">
                     </div>
                 </div>
                 <!--基本信息的编辑框-->
@@ -124,12 +124,14 @@
                         </el-dropdown>
                     </div>
                     <div style="margin-left:360px;margin-top:-20px;">
-                        <div><img src="/img/head.jpg" alt="" width="120px" height="120px"></div>
-                        <div style="margin-left:20px;margin-top:5px;">
-
+                        <div><img :src="basicInfo.headImg" alt="" width="120px" height="120px" id="img"></div>
+                        <div style="margin-top:5px;">
+                            <div style="margin-top:15px;">
+                                <input type="file" name="ResumeFile" accept=".jpg,.png"  id="btn" @change="uploadHeadImg">
+                            </div>
                         </div>
                     </div>
-                    <div style="margin-top:-40px;">
+                    <div style="margin-top:-90px;">
                         <el-input v-model="basicInfo.company" style="width:305px;height:40px;" placeholder="当前公司"></el-input>
                     </div>
                     <div style="margin-top:10px;">
@@ -282,9 +284,9 @@
                         <span class="el-info-tag">简历附件</span>
                     </div>
                     <div style="margin-top:60px;" :style="{display:resume.resumeState==='none'?'block':'none'}">
-                        <div class="resumeUpload">
+                        <div>
                             <div class="uploadBox">
-                                <a href="javascript:void(0);" for="uploadBtn" class="uploadBox_text">上传简历附件</a>
+                                <a href="javascript:void(0);" for="uploadBtn">上传简历附件</a>
                             </div>
                             <p style="text-align:center;padding-top:16px;color:#999999;">格式仅支持pdf、doc、docx、png不超过20M</p>
                         </div>
@@ -511,6 +513,7 @@
                 this.contactInfo.mail=result.data.user_mail;
                 this.resume.resumeName=result.data.user_resume_name;
                 this.resume.resumeTime=result.data.user_resume_upload_time;
+                this.basicInfo.headImg=result.data.user_head_img;
                 if(this.resume.resumeName.substring(this.resume.resumeName.lastIndexOf('.')+1)==='pdf'){
                     this.resume.resumeImg='/img/pdf.png';
                 }else if(this.resume.resumeName.substring(this.resume.resumeName.lastIndexOf('.')+1)==='doc'){
@@ -523,7 +526,21 @@
                 if(this.resume.resumeName.length>0)this.resume.resumeState='block';
             },
             async updateBasicInfo(){
-                let result=await axios.get('/updateBasicInfo?realName='+this.basicInfo.realName+'&sex='+this.basicInfo.sex+'&company='+this.basicInfo.company+'&position='+this.basicInfo.position+'&work_direction='+this.basicInfo.value+' '+this.basicInfo.value1);
+                let params=new FormData();
+                params.append("realName",this.basicInfo.realName);
+                params.append("sex",this.basicInfo.sex);
+                params.append("company",this.basicInfo.company);
+                params.append("position",this.basicInfo.position);
+                params.append("work_direction",this.basicInfo.value+' '+this.basicInfo.value1);
+                params.append("head_img",document.getElementById("btn").files[0]);
+                let result=await axios({
+                   method: 'post',
+                   url: '/updateBasicInfo',
+                   data: params,
+                   headers: {
+                       "Content-Type": "multipart/form-data"
+                   }
+                });
                 if(result.data===1){
                     this.$message({
                         showClose: true,
@@ -649,6 +666,14 @@
             },
             modifyPassword(){
 
+            },
+            uploadHeadImg(){
+                let file=document.getElementById("btn").files[0];
+                var reader=new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload=function (e) {
+                    document.getElementById('img').src=this.result;
+                }
             }
         }
     })

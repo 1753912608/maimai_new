@@ -53,8 +53,8 @@ public interface UserMapper {
      * @param user_id
      * 更新用户的基本信息
      */
-    @Update("update user set user_real_name=#{realName},user_sex=#{sex},user_position=#{position},user_company=#{company},user_work_direction=#{work_direction} where user_id=#{user_id}")
-    void updateBasicInfo(String realName,String sex,String company,String position,String work_direction,String user_id);
+    @Update("update user set user_real_name=#{realName},user_sex=#{sex},user_position=#{position},user_company=#{company},user_work_direction=#{work_direction},user_head_img=#{head_img} where user_id=#{user_id}")
+    void updateBasicInfo(String realName,String sex,String company,String position,String work_direction,String head_img,String user_id);
 
 
 

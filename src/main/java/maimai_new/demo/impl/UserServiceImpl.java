@@ -26,9 +26,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public int updateBasicInfo(String realName, String sex, String company, String position, String work_direction,String user_id) {
+    public int updateBasicInfo(String realName, String sex, String company, String position, String work_direction,String head_img,String user_id) {
         try{
-            userMapper.updateBasicInfo(realName,sex,company,position,work_direction,user_id);
+            userMapper.updateBasicInfo(realName,sex,company,position,work_direction,head_img,user_id);
         }catch (Exception e){
             e.printStackTrace();
             return 0;
