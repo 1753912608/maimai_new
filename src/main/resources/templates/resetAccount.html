@@ -8,23 +8,170 @@
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        *{
+            padding:0 0px;
+            margin: 0 0px;
+        }
+        .header{
+            width:100%;
+            height:96px;
+        }
+        .content{
+            background-color:#F2F4F8;
+            height:607px;
+        }
+        .img{
+            width:80px;
+            height:50px;
+        }
+        .content_form{
+            width:450px;
+            height:480px;
+            background-color:white;
+            margin-left:550px;
+        }
+        ._input{
+            width:355px;
+        }
+        .login{
+            width:355px;
+            margin-top:20px;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
-
+    <div class="header">
+        <ul style="padding-top:20px;">
+            <li style="float:left;margin-left:200px;list-style:none">
+                <img src="/img/logo.png" alt="" class="img">
+            </li>
+        </ul>
+    </div>
+    <div style="width:100%;height:50px;background-color:#F2F4F8;"></div>
+    <div class="content">
+        <div class="content_form">
+            <div style="padding-top:50px;margin-left:40px;">
+                <p style="font-size:24px;font-weight:700;">重置密码</p>
+            </div>
+            <div style="margin-left:40px;margin-top:30px;">
+                <el-input v-model="form.phone" placeholder="请输如绑定账号的手机号"  class="_input">
+                </el-input>
+            </div>
+            <div style="margin-top:10px;margin-left:40px;">
+                <el-input v-model="form.password" placeholder="输入新的密码" type="password" class="_input">
+                </el-input>
+            </div>
+            <div style="margin-top:10px;margin-left:40px;">
+                <el-input v-model="form.password1" placeholder="再次确认密码" type="password" class="_input">
+                </el-input>
+            </div>
+            <div style="margin-top:20px;margin-left:40px;">
+                <el-input v-model="form.code" placeholder="请输入验证码" style="width:220px;"></el-input>
+                <el-button type="primary" plain style="margin-left:15px;" @click="sendPhoneCode" size="medium">{{form.code_state}}</el-button>
+            </div>
+            <div style="margin-top:30px;margin-left:40px;">
+                <el-button type="primary" class="login" style="margin-left:-1px;" @click="check">重置密码</el-button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 <script>
     new Vue({
         el: '#app',
         data:{
-
+            form: {
+                phone: '',
+                password: '',
+                password1: '',
+                code_state: '发送验证码',
+                rand_uuid: '',
+                code: ''
+            }
         },
         created(){
 
         },
         methods:{
-
+            async sendPhoneCode(){
+                this.getUUid();
+                if(this.form.phone.length===0) {
+                    this.$message({
+                        showClose: true,
+                        message: '手机号码不能为空',
+                        type: 'error'
+                    });
+                }else{
+                    if(this.form.code_state==='发送验证码'){
+                        let result=await axios.get('/sendPhoneCode?phone='+this.form.phone+'&rand_uuid='+this.form.rand_uuid);
+                        console.log(result);
+                        if(result.data===1){
+                            this.$message({
+                                showClose: true,
+                                message: '发送验证码成功',
+                                type: 'success'
+                            });
+                            let lastTime = 59;
+                            let timer = setInterval(() => {
+                                if(lastTime>0){
+                                    this.form.code_state = lastTime + 's';
+                                    lastTime--;
+                                } else {
+                                    window.clearInterval(timer);
+                                    this.form.code_state = '发送验证码'
+                                }
+                            }, 1000);
+                        }else{
+                            this.$message({
+                                showClose: true,
+                                message: '手机号码格式错误,请输入正确的手机号',
+                                type: 'error'
+                            });
+                        }
+                    }
+                    else{
+                        this.$message({
+                            message: '请不要频繁点击哦',
+                            type: 'warning'
+                        });
+                    }
+                }
+            },
+            async check(){
+                if(this.form.password.length===0){
+                    this.$message({
+                        message: '密码不能为空',
+                        type: 'warning'
+                    });
+                    return ;
+                }
+                if(this.form.password!=this.form.password1){
+                    this.$message({
+                        message: '两次密码输入不正确',
+                        type: 'warning'
+                    });
+                    return ;
+                }
+                let result=await axios.get('/updatePassword?user_password='+this.form.password+'&rand_uuid='+this.form.rand_uuid+'&code='+this.form.code);
+                if(result.data===1){
+                    window.location.href="/center";
+                }else{
+                    this.$message({
+                        showClose: true,
+                        message: '验证码输入错误',
+                        type: 'error'
+                    });
+                }
+            },
+            getUUid(){
+                let rand_uuid='';
+                for(let i=0;i<20;i++){
+                    rand_uuid+=Math.floor(Math.random()*26)+'a';
+                }
+                this.form.rand_uuid=rand_uuid;
+            }
         }
     })
 </script>

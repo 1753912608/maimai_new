@@ -524,7 +524,10 @@
                     this.resume.resumeImg='/img/png.png';
                 }
                 if(this.resume.resumeName.length>0)this.resume.resumeState='block';
+                console.log(result.data);
                 if(result.data.user_password===null)this.account.accountState='block';
+                else this.account.accountState='none';
+                console.log(this.account.accountState);
             },
             async updateBasicInfo(){
                 let params=new FormData();
@@ -666,7 +669,7 @@
                 this.contactInfo.rand_uuid=rand_uuid;
             },
             modifyPassword(){
-                window.location.href="/test_authentication";
+                window.location.href="/reset";
             },
             uploadHeadImg(){
                 let file=document.getElementById("btn").files[0];

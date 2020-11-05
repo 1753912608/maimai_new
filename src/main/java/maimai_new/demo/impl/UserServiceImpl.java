@@ -1,5 +1,6 @@
 package maimai_new.demo.impl;
 
+import maimai_new.demo.dao.rand.randomUtils;
 import maimai_new.demo.dao.user;
 import maimai_new.demo.mapper.UserMapper;
 import maimai_new.demo.service.UserService;
@@ -83,5 +84,22 @@ public class UserServiceImpl implements UserService{
             return 0;
         }
         return 1;
+    }
+
+
+    @Override
+    public int updatePassword(String user_password, String user_id) {
+        try{
+            userMapper.updatePassword(user_password,user_id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+        return 1;
+    }
+
+    @Override
+    public String getPasswordByPhone(String phone) {
+        return userMapper.getPasswordByPhone(phone);
     }
 }

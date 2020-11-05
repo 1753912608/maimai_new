@@ -30,8 +30,8 @@ public class PageController {
         return "chat";
     }
 
-    @RequestMapping("/test_authentication")
-    public String authentication(){
-        return "authentication";
+    @RequestMapping("/reset")
+    public String reset(){
+        return "resetAccount";
     }
 }

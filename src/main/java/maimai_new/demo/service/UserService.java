@@ -100,4 +100,27 @@ public interface UserService {
      * 更新用户简历的存储url
      */
     int uploadResume(String user_resume_url,String resume_name,String resume_upload_time,String user_id);
+
+
+
+
+
+    /**
+     *
+     * @param user_password
+     * @param user_id
+     * @return
+     * 更新用户密码
+     */
+    int updatePassword(String user_password,String user_id);
+
+
+
+    /**
+     *
+     * @param phone
+     * @return
+     * 获取账号密码
+     */
+    String getPasswordByPhone(String phone);
 }

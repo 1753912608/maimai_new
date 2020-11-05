@@ -109,4 +109,28 @@ public interface UserMapper {
      */
     @Update("update user set user_resume_url=#{user_resume_url},user_resume_name=#{resume_name},user_resume_upload_time=#{time} where user_id=#{user_id}")
     void uploadResume(String user_resume_url,String resume_name,String time,String user_id);
+
+
+
+
+    /**
+     *
+     * @param user_password
+     * @param user_id
+     * 更新用户密码
+     */
+    @Update("update user set user_password=#{user_password} where user_id=#{user_id}")
+    void updatePassword(String user_password,String user_id);
+
+
+
+
+    /**
+     *
+     * @param phone
+     * @return
+     * 查询用户密码
+     */
+    @Select("select user_password from user where  user_id=#{phone}")
+    String getPasswordByPhone(String phone);
 }

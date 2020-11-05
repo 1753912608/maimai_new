@@ -328,4 +328,54 @@ public class UserController{
         return 1;
     }
 
+
+
+
+    /**
+     *
+     * @param user_password
+     * @param rand_uuid
+     * @param code
+     * @param request
+     * @return
+     * 更新用户密码
+     */
+    @ResponseBody
+    @RequestMapping("/updatePassword")
+    public int updatePassword(String user_password,
+                              String rand_uuid,
+                              String code,
+                              HttpServletRequest request){
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        if(redisService.getPhoneCode(rand_uuid).equals(code)){
+            return userService.updatePassword(user_password,user_id);
+        }else{
+            return 0;
+        }
+    }
+
+
+
+
+    /**
+     *
+     * @param phone
+     * @param password
+     * @param request
+     * @return
+     * 账号密码登录
+     */
+    @ResponseBody
+    @RequestMapping("/loginByPassword")
+    public int loginByPassword(String phone,
+                               String password,
+                               HttpServletRequest request){
+        HttpSession session=request.getSession();
+        if(userService.getPasswordByPhone(phone).equals(password)){
+            session.setAttribute(SessionInfo.USER_ID,phone);
+            return 1;
+        }
+        return 0;
+    }
 }
