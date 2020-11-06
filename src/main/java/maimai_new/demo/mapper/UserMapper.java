@@ -2,10 +2,7 @@ package maimai_new.demo.mapper;
 
 
 import maimai_new.demo.dao.user;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface UserMapper {
@@ -133,4 +130,28 @@ public interface UserMapper {
      */
     @Select("select user_password from user where  user_id=#{phone}")
     String getPasswordByPhone(String phone);
+
+
+
+
+    /**
+     *
+     * @param dynamic_id
+     * @param user_id
+     * 用户对动态点赞
+     */
+    @Insert("insert into dianzan values(#{dynamic_id},#{user_id},#{time})")
+    void thumbsUp(String dynamic_id,String user_id,String time);
+
+
+
+
+    /**
+     *
+     * @param dynamic_id
+     * @param user_id
+     * 用户对动态取消点赞
+     */
+    @Delete("delete from dianzan where dianzan_dynamic_id=#{dynamic_id} and dianzan_user_id=#{user_id}")
+    void thumbsDown(String dynamic_id,String user_id);
 }

@@ -123,4 +123,26 @@ public interface UserService {
      * 获取账号密码
      */
     String getPasswordByPhone(String phone);
+
+
+
+
+    /**
+     *
+     * @param dynamic_id
+     * @param user_id
+     * 用户对动态点赞
+     */
+    void thumbsUp(String dynamic_id,String user_id,String time);
+
+
+
+
+    /**
+     *
+     * @param dynamic_id
+     * @param user_id
+     * 用户对动态取消点赞
+     */
+    void thumbsDowm(String dynamic_id,String user_id);
 }

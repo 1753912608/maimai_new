@@ -62,4 +62,29 @@ public class RedisServiceImpl {
     public user getUserInfo(String user_id){
         return (user) redisTemplate.opsForValue().get(user_id);
     }
+
+
+
+
+    /**
+     *
+     * @param dynamic_id
+     * @param user_id
+     * 用户对动态进行点赞
+     */
+    public void thumbsUp(String dynamic_id,String user_id){
+        redisTemplate.opsForSet().add("dianzan:dynamic_id:"+dynamic_id,user_id);
+    }
+
+
+
+    /**
+     *
+     * @param dynamic_id
+     * @param user_id
+     * 用户对动态取消点赞
+     */
+    public void thumbsDowm(String dynamic_id,String user_id){
+        redisTemplate.opsForSet().remove("dianzan:dynamic_id:"+dynamic_id,user_id);
+    }
 }

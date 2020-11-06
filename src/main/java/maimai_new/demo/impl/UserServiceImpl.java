@@ -102,4 +102,14 @@ public class UserServiceImpl implements UserService{
     public String getPasswordByPhone(String phone) {
         return userMapper.getPasswordByPhone(phone);
     }
+
+    @Override
+    public void thumbsUp(String dynamic_id, String user_id, String time) {
+        userMapper.thumbsUp(dynamic_id,user_id,time);
+    }
+
+    @Override
+    public void thumbsDowm(String dynamic_id, String user_id) {
+        userMapper.thumbsDown(dynamic_id,user_id);
+    }
 }

@@ -378,4 +378,42 @@ public class UserController{
         }
         return 0;
     }
+
+
+
+
+    /**
+     *
+     * @param dynamic_id
+     * @param time
+     * @param request
+     * @param state state为true则表示点赞,否则为取消点赞
+     * @return
+     * 点赞(点赞,取消点赞)
+     */
+    @ResponseBody
+    @RequestMapping("/thumbs")
+    public int thumbs(String dynamic_id,
+                        String time,
+                        boolean state,
+                        HttpServletRequest request)
+    {
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        try{
+            if(state){
+                redisService.thumbsUp(dynamic_id,user_id);
+                userService.thumbsUp(dynamic_id,user_id,time);
+            }
+            else{
+                redisService.thumbsDowm(dynamic_id,user_id);
+                userService.thumbsDowm(dynamic_id,user_id);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+        return 1;
+    }
+
 }
