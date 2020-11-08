@@ -416,4 +416,24 @@ public class UserController{
         return 1;
     }
 
+
+
+
+    /**
+     *
+     * @param comment_content
+     * @param comment_time
+     * @param request
+     * @return
+     *发表动态评论(评论,回复评论)
+     */
+    @ResponseBody
+    @RequestMapping("/publishDynamicComment")
+    public int publishDynamicComment(String comment_content,
+                                     String comment_time,
+                                     HttpServletRequest request){
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        return 1;
+    }
 }

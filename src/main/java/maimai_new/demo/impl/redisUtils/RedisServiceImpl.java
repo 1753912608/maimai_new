@@ -87,4 +87,11 @@ public class RedisServiceImpl {
     public void thumbsDowm(String dynamic_id,String user_id){
         redisTemplate.opsForSet().remove("dianzan:dynamic_id:"+dynamic_id,user_id);
     }
+
+
+
+
+    public void publishDynamicComment(){
+
+    }
 }
