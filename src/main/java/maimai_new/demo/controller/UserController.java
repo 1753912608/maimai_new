@@ -2,7 +2,9 @@ package maimai_new.demo.controller;
 
 
 import maimai_new.demo.dao.SessionInfo;
+import maimai_new.demo.dao.comment;
 import maimai_new.demo.dao.rand.randomUtils;
+import maimai_new.demo.dao.shield;
 import maimai_new.demo.dao.user;
 import maimai_new.demo.impl.UserServiceImpl;
 import maimai_new.demo.impl.aliyunUtils.AliYun;
@@ -434,6 +436,43 @@ public class UserController{
                                      HttpServletRequest request){
         HttpSession session=request.getSession();
         String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        comment comment=new comment(randomUtils.getCommentId(),user_id,comment_time,comment_content);
+        try{
+            redisService.publishDynamicComment(comment);
+            userService.publishDynamicComment(comment);
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+        return 1;
+    }
+
+
+
+
+    /**
+     *
+     * @param shield_other_user_id
+     * @param request
+     * @param state state为true时表示屏蔽该用户,否则为取消屏蔽
+     * @return
+     * 屏蔽用户
+     */
+    @ResponseBody
+    @RequestMapping("/shieldOther")
+    public int shieldOther(String shield_other_user_id,
+                           boolean state,
+                           HttpServletRequest request){
+        HttpSession session=request.getSession();
+        String user_id=(String)session.getAttribute(SessionInfo.USER_ID);
+        shield shield=new shield(user_id,shield_other_user_id);
+        if(state){
+            redisService.addShieldOther(shield);
+            userService.addShieldOther(shield);
+        }else{
+            redisService.cancelShieldOther(shield);
+            userService.cancelShieldOther(shield);
+        }
         return 1;
     }
 }

@@ -1,6 +1,8 @@
 package maimai_new.demo.impl.redisUtils;
 
 
+import maimai_new.demo.dao.comment;
+import maimai_new.demo.dao.shield;
 import maimai_new.demo.dao.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -91,7 +93,35 @@ public class RedisServiceImpl {
 
 
 
-    public void publishDynamicComment(){
+    /**
+     *
+     * @param comment
+     * 发布动态评论
+     */
+    public void publishDynamicComment(comment comment){
+        redisTemplate.opsForList().leftPush("comment:dynamic_id:"+comment.getComment_dynamic_id(),comment);
+    }
 
+
+
+    /**
+     *
+     * @param shield
+     * 屏蔽其他用户
+     */
+    public void addShieldOther(shield shield){
+        redisTemplate.opsForSet().add("shield:user_id:"+shield.getShield_user_id(),shield.getShield_other_user_id());
+    }
+
+
+
+
+    /**
+     *
+     * @param shield
+     * 取消屏蔽其他用户
+     */
+    public void cancelShieldOther(shield shield){
+        redisTemplate.opsForSet().remove("shield:user_id:"+shield.getShield_user_id(),shield.getShield_other_user_id());
     }
 }

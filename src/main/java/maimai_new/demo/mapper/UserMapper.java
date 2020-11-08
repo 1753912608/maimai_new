@@ -1,6 +1,8 @@
 package maimai_new.demo.mapper;
 
 
+import maimai_new.demo.dao.comment;
+import maimai_new.demo.dao.shield;
 import maimai_new.demo.dao.user;
 import org.apache.ibatis.annotations.*;
 
@@ -154,4 +156,37 @@ public interface UserMapper {
      */
     @Delete("delete from dianzan where dianzan_dynamic_id=#{dynamic_id} and dianzan_user_id=#{user_id}")
     void thumbsDown(String dynamic_id,String user_id);
+
+
+
+
+    /**
+     *
+     * @param comment
+     * 发布动态评论
+     */
+    @Insert("insert into comment values(#{comment_dynamic_id},#{comment_user_id},#{comment_time},#{comment_content})")
+    void publishDynamicComment(comment comment);
+
+
+
+
+    /**
+     *
+     * @param shield
+     * 屏蔽其他用户
+     */
+    @Insert("insert into shield values(#{shield_user_id},#{shield_other_user_id})")
+    void addShieldOther(shield shield);
+
+
+
+
+    /**
+     *
+     * @param shield
+     * 取消屏蔽其他用户
+     */
+    @Delete("delete from shield where shield_user_id=#{shield_user_id} and shield_other_user_id=#{shield_other_user_id}")
+    void cancelShieldOther(shield shield);
 }

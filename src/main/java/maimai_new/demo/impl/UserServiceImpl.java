@@ -1,6 +1,8 @@
 package maimai_new.demo.impl;
 
+import maimai_new.demo.dao.comment;
 import maimai_new.demo.dao.rand.randomUtils;
+import maimai_new.demo.dao.shield;
 import maimai_new.demo.dao.user;
 import maimai_new.demo.mapper.UserMapper;
 import maimai_new.demo.service.UserService;
@@ -111,5 +113,20 @@ public class UserServiceImpl implements UserService{
     @Override
     public void thumbsDowm(String dynamic_id, String user_id) {
         userMapper.thumbsDown(dynamic_id,user_id);
+    }
+
+    @Override
+    public void publishDynamicComment(comment comment) {
+        userMapper.publishDynamicComment(comment);
+    }
+
+    @Override
+    public void addShieldOther(shield shield) {
+        userMapper.addShieldOther(shield);
+    }
+
+    @Override
+    public void cancelShieldOther(shield shield) {
+        userMapper.cancelShieldOther(shield);
     }
 }

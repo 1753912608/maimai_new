@@ -1,5 +1,7 @@
 package maimai_new.demo.service;
 
+import maimai_new.demo.dao.comment;
+import maimai_new.demo.dao.shield;
 import maimai_new.demo.dao.user;
 
 public interface UserService {
@@ -145,4 +147,33 @@ public interface UserService {
      * 用户对动态取消点赞
      */
     void thumbsDowm(String dynamic_id,String user_id);
+
+
+
+
+    /**
+     *
+     * @param comment
+     * 发布动态评论
+     */
+    void publishDynamicComment(comment comment);
+
+
+
+    /**
+     *
+     * @param shield
+     * 屏蔽其他用户
+     */
+    void addShieldOther(shield shield);
+
+
+
+
+    /**
+     *
+     * @param shield
+     * 取消屏蔽其他用户
+     */
+    void cancelShieldOther(shield shield);
 }

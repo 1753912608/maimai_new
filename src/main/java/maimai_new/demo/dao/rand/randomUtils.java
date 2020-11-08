@@ -19,4 +19,20 @@ public class randomUtils {
         return buffer.toString();
     }
 
+
+
+    /**
+     *
+     * @return
+     * 随机产生动态评论的id
+     */
+    public static String getCommentId(){
+        StringBuffer buffer=new StringBuffer("");
+        Random rand=new Random();
+        buffer.append("comment:");
+        for(int i=0;i<10;i++){
+            buffer.append(rand.nextInt(26)+'a');
+        }
+        return buffer.toString();
+    }
 }
