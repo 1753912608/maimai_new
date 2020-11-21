@@ -34,4 +34,18 @@ public class PageController {
     public String reset(){
         return "resetAccount";
     }
+
+    /**
+     * zwl
+     */
+
+    @RequestMapping("/test")
+    public String test() {
+        return "test";
+    }
+
+    @RequestMapping("/zhaopin")
+    public String zhaopin() {
+        return "zhaopin";
+    }
 }
