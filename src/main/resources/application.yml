@@ -3,7 +3,7 @@ spring:
     url: jdbc:mysql://127.0.0.1/maimai?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     driverClassName: com.mysql.jdbc.Driver
     username: root
-    password:
+    password: 123456
   redis:
     host: 127.0.0.1
     port: 6379
