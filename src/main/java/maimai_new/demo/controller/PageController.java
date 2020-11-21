@@ -48,4 +48,9 @@ public class PageController {
     public String zhaopin() {
         return "zhaopin";
     }
+
+    @RequestMapping("/manager")
+    public String manager() {
+        return "manager";
+    }
 }
